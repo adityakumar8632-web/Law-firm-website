@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Insights & Legal Updates — X Law Firm</title>
+<meta name="description" content="Commentary and analysis on legal developments impacting businesses and institutions. Read the latest insights from X Law Firm's attorneys." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/interactions.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<style>
+/* ── INSIGHTS PAGE ───────────────────────────────────── */
+
+/* Featured article */
+.featured-section {
+    padding: clamp(60px, 8svh, 100px) var(--inline-pad);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.featured-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+
+.featured-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover;
+    opacity: 0.04;
+}
+
+.featured-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(36px, 5vw, 80px);
+    align-items: center;
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+@media (max-width: 900px) { .featured-grid { grid-template-columns: 1fr; } }
+
+.featured-visual {
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 16/10;
+    position: relative;
+}
+
+.featured-visual img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 500ms var(--ease-standard);
+}
+
+.featured-visual:hover img { transform: scale(1.03); }
+
+.featured-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border: 1px solid rgba(27,42,74,0.2);
+    border-radius: 2px;
+    padding: 4px 10px;
+    margin-bottom: 1.25rem;
+    background: rgba(27,42,74,0.04);
+}
+
+.featured-title {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.12;
+    margin-bottom: 1rem;
+    transition: color 220ms;
+}
+
+.featured-title:hover { color: var(--color-accent); }
+
+.featured-excerpt {
+    color: var(--color-muted);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+    font-size: 0.95rem;
+}
+
+.featured-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 0.78rem;
+    color: var(--color-muted);
+    margin-bottom: 1.75rem;
+}
+
+.featured-meta span { display: flex; align-items: center; gap: 5px; }
+.featured-meta svg { width: 13px; height: 13px; stroke-width: 1.5; }
+
+/* Articles grid */
+.articles-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.articles-bg {
+    position: absolute;
+    inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.articles-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover;
+    opacity: 0.04;
+}
+
+.articles-inner { position: relative; z-index: 2; }
+
+/* Filter bar */
+.articles-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: clamp(32px, 5svh, 56px);
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    height: 36px;
+    padding-inline: 18px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    background: #fff;
+    cursor: pointer;
+    transition: all 220ms var(--ease-standard);
+}
+
+.filter-tab.is-active,
+.filter-tab:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.articles-count {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    white-space: nowrap;
+}
+
+/* Article cards grid */
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+}
+
+@media (max-width: 1024px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px)  { .articles-grid { grid-template-columns: 1fr; } }
+
+.article-card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transition: border-color 240ms var(--ease-standard),
+                transform 240ms var(--ease-standard),
+                box-shadow 240ms var(--ease-standard);
+    cursor: pointer;
+}
+
+.article-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(27,42,74,0.1);
+}
+
+.article-card-image {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+.article-card-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(20%);
+    transition: transform 400ms var(--ease-standard), filter 400ms;
+}
+
+.article-card:hover .article-card-image img {
+    transform: scale(1.04);
+    filter: grayscale(0%);
+}
+
+.article-card-body {
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.article-category {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.6rem;
+}
+
+.article-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 0.6rem;
+    transition: color 220ms;
+}
+
+.article-card:hover .article-card-title { color: var(--color-accent); }
+
+.article-card-excerpt {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    flex-grow: 1;
+    margin-bottom: 1rem;
+}
+
+.article-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.article-card-date {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.article-card-date svg { width: 12px; height: 12px; stroke-width: 1.5; }
+
+.article-read-link {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 200ms;
+    text-decoration: none;
+}
+
+.article-read-link:hover { gap: 8px; }
+.article-read-link svg { width: 13px; height: 13px; }
+
+/* Load more */
+.load-more-wrap {
+    text-align: center;
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+/* Newsletter */
+.newsletter-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.newsletter-bg {
+    position: absolute;
+    inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.newsletter-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover;
+    opacity: 0.08;
+}
+
+.newsletter-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(36px, 6vw, 80px);
+    align-items: center;
+}
+
+@media (max-width: 900px) { .newsletter-inner { grid-template-columns: 1fr; } }
+
+.newsletter-content h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.12;
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.newsletter-content p {
+    color: rgba(255,255,255,0.65);
+    line-height: 1.7;
+    font-size: 0.95rem;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.newsletter-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+@media (max-width: 480px) { .newsletter-input-row { flex-direction: column; } }
+
+.newsletter-input {
+    flex: 1;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 3px;
+    background: rgba(255,255,255,0.08);
+    color: #fff;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    outline: none;
+    transition: border-color 220ms, background 220ms;
+}
+
+.newsletter-input::placeholder { color: rgba(255,255,255,0.4); }
+.newsletter-input:focus {
+    border-color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.12);
+}
+
+.newsletter-disclaimer {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    line-height: 1.5;
+}
+
+.newsletter-success {
+    display: none;
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 4px;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.875rem;
+    align-items: center;
+    gap: 8px;
+}
+
+.newsletter-success svg { width: 16px; height: 16px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="index.html" class="logo">X Law Firm</a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+            <a href="attorneys.html" class="nav-link">Attorneys</a>
+            <a href="insights.html" class="nav-link active">Insights</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <a href="contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="attorneys.html" class="nav-link">Attorneys</a>
+        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ══ PAGE HERO ══════════════════════════════════════════════ -->
+<section class="page-hero">
+    <div class="page-hero-bg" data-parallax data-parallax-speed="0.3">
+        <img
+            src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1800&auto=format&fit=crop&q=80"
+            alt="Legal documents and analysis"
+            fetchpriority="high"
+        />
+    </div>
+    <div class="page-hero-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Insights</span>
+        </div>
+        <h1 class="page-title">Insights &amp; Legal Updates</h1>
+        <p class="page-subtitle">
+            Commentary and analysis from our attorneys on legal developments
+            shaping businesses and institutions across India and beyond.
+        </p>
+    </div>
+</section>
+
+<!-- ══ FEATURED ═══════════════════════════════════════════════ -->
+<section class="featured-section">
+    <div class="featured-bg" data-parallax data-parallax-speed="0.22">
+        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="featured-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Latest</span>
+            <h2 class="section-title">Featured Insight</h2>
+        </div>
+        <div class="featured-grid">
+            <div class="featured-visual reveal">
+                <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=900&auto=format&fit=crop&q=80" alt="Cross-border transactions">
+            </div>
+            <div class="reveal">
+                <span class="featured-tag">Corporate Law</span>
+                <a href="article.html?id=cross-border-transactions">
+                    <h2 class="featured-title">Key Considerations in Cross-Border Transactions: A 2026 Perspective</h2>
+                </a>
+                <div class="featured-meta">
+                    <span><i data-lucide="user"></i> Arjun Mehta</span>
+                    <span><i data-lucide="calendar"></i> January 2026</span>
+                    <span><i data-lucide="clock"></i> 8 min read</span>
+                </div>
+                <p class="featured-excerpt">
+                    Cross-border transactions have grown significantly more complex in a post-pandemic
+                    regulatory environment. This article examines the key legal, regulatory, and commercial
+                    factors businesses must navigate when structuring international deals — from foreign
+                    exchange controls to multi-jurisdictional due diligence frameworks.
+                </p>
+                <a href="article.html?id=cross-border-transactions" class="btn btn-primary">Read the Insight</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ ARTICLES GRID ══════════════════════════════════════════ -->
+<section class="articles-section">
+    <div class="articles-bg" data-parallax data-parallax-speed="0.2">
+        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="articles-inner">
+        <div class="articles-filter-bar reveal">
+            <div class="filter-tabs">
+                <button class="filter-tab is-active" data-filter="all">All</button>
+                <button class="filter-tab" data-filter="corporate">Corporate Law</button>
+                <button class="filter-tab" data-filter="litigation">Litigation</button>
+                <button class="filter-tab" data-filter="regulatory">Regulatory</button>
+                <button class="filter-tab" data-filter="commercial">Commercial</button>
+            </div>
+            <span class="articles-count" id="articleCount">Showing 6 articles</span>
+        </div>
+
+        <div class="articles-grid stagger-children" id="articlesGrid">
+
+            <article class="article-card" data-category="litigation">
+                <div class="article-card-image">
+                    <img src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&auto=format&fit=crop&q=80" alt="Commercial dispute">
+                </div>
+                <div class="article-card-body">
+                    <span class="article-category">Litigation</span>
+                    <h3 class="article-card-title">Managing Risk in High-Value Commercial Disputes</h3>
+                    <p class="article-card-excerpt">Practical guidance on mitigating exposure and navigating complex dispute resolution processes involving significant commercial stakes.</p>
+                    <div class="article-card-footer">
+                        <span class="article-card-date"><i data-lucide="calendar"></i> January 2026</span>
+                        <a href="article.html?id=commercial-disputes" class="article-read-link">Read <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="regulatory">
+                <div class="article-card-image">
+                    <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=600&auto=format&fit=crop&q=80" alt="Regulatory compliance">
+                </div>
+                <div class="article-card-body">
+                    <span class="article-category">Regulatory</span>
+                    <h3 class="article-card-title">Recent Developments in Regulatory Compliance</h3>
+                    <p class="article-card-excerpt">A summary of recent regulatory changes and their implications for businesses operating across jurisdictions in India.</p>
+                    <div class="article-card-footer">
+                        <span class="article-card-date"><i data-lucide="calendar"></i> December 2025</span>
+                        <a href="article.html?id=regulatory-developments" class="article-read-link">Read <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="commercial">
+                <div class="article-card-image">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=600&auto=format&fit=crop&q=80" alt="Commercial contracts">
+                </div>
+                <div class="article-card-body">
+                    <span class="article-category">Commercial</span>
+                    <h3 class="article-card-title">Drafting for Resilience: Force Majeure Clauses Post-Pandemic</h3>
+                    <p class="article-card-excerpt">How commercial contracts are evolving to address unforeseen disruption and allocate risk more effectively between parties.</p>
+                    <div class="article-card-footer">
+                        <span class="article-card-date"><i data-lucide="calendar"></i> November 2025</span>
+                        <a href="article.html?id=force-majeure" class="article-read-link">Read <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="corporate">
+                <div class="article-card-image">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=600&auto=format&fit=crop&q=80" alt="ESG compliance">
+                </div>
+                <div class="article-card-body">
+                    <span class="article-category">Corporate Law</span>
+                    <h3 class="article-card-title">ESG Obligations for Listed Companies: What's Changing in 2026</h3>
+                    <p class="article-card-excerpt">An overview of new ESG disclosure and governance requirements affecting listed entities under SEBI's updated framework.</p>
+                    <div class="article-card-footer">
+                        <span class="article-card-date"><i data-lucide="calendar"></i> October 2025</span>
+                        <a href="article.html?id=esg-obligations" class="article-read-link">Read <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="regulatory">
+                <div class="article-card-image">
+                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&auto=format&fit=crop&q=80" alt="Data privacy">
+                </div>
+                <div class="article-card-body">
+                    <span class="article-category">Regulatory</span>
+                    <h3 class="article-card-title">DPDP Act: What Businesses Must Do Now</h3>
+                    <p class="article-card-excerpt">A practical breakdown of compliance obligations under India's Digital Personal Data Protection Act and the steps organisations must take immediately.</p>
+                    <div class="article-card-footer">
+                        <span class="article-card-date"><i data-lucide="calendar"></i> September 2025</span>
+                        <a href="article.html?id=dpdp-act" class="article-read-link">Read <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="litigation corporate">
+                <div class="article-card-image">
+                    <img src="https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=600&auto=format&fit=crop&q=80" alt="IBC insolvency">
+                </div>
+                <div class="article-card-body">
+                    <span class="article-category">Litigation · Corporate</span>
+                    <h3 class="article-card-title">IBC at Nine: Key Lessons for Creditors and Debtors</h3>
+                    <p class="article-card-excerpt">Nine years into the Insolvency and Bankruptcy Code, what have courts decided — and what does it mean for businesses navigating financial distress?</p>
+                    <div class="article-card-footer">
+                        <span class="article-card-date"><i data-lucide="calendar"></i> August 2025</span>
+                        <a href="article.html?id=ibc-nine-years" class="article-read-link">Read <i data-lucide="arrow-right"></i></a>
+                    </div>
+                </div>
+            </article>
+
+        </div><!-- /articles-grid -->
+
+        <div class="load-more-wrap reveal" id="loadMoreWrap">
+            <button class="btn btn-secondary" id="loadMoreBtn">Load More Insights</button>
+        </div>
+    </div>
+</section>
+
+<!-- ══ NEWSLETTER ═════════════════════════════════════════════ -->
+<section class="newsletter-section">
+    <div class="newsletter-bg" data-parallax data-parallax-speed="0.28">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="newsletter-inner">
+        <div class="newsletter-content reveal">
+            <span class="section-label light">Stay Informed</span>
+            <h2>Legal Updates,<br>Straight to Your Inbox</h2>
+            <p>
+                Subscribe to receive our latest insights, regulatory alerts,
+                and legal commentary — delivered monthly, with no noise.
+            </p>
+        </div>
+        <div class="reveal">
+            <form class="newsletter-form" id="newsletterForm" novalidate>
+                <div class="newsletter-input-row">
+                    <input
+                        type="text"
+                        class="newsletter-input"
+                        id="newsletterName"
+                        placeholder="Your name"
+                        autocomplete="name"
+                        required
+                    />
+                    <input
+                        type="email"
+                        class="newsletter-input"
+                        id="newsletterEmail"
+                        placeholder="Email address"
+                        autocomplete="email"
+                        required
+                    />
+                </div>
+                <button type="submit" class="btn btn-white">Subscribe to Insights</button>
+                <p class="newsletter-disclaimer">
+                    No spam. Unsubscribe any time. Your information is kept strictly confidential.
+                </p>
+            </form>
+            <div class="newsletter-success" id="newsletterSuccess">
+                <i data-lucide="check-circle"></i>
+                <span>Subscribed successfully. You'll receive our next insight shortly.</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">X Law Firm</a>
+            <p>A full-service law firm providing strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="practice-areas.html#corporate-law">Corporate Law</a></li>
+                <li><a href="practice-areas.html#litigation">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="practice-areas.html#regulatory">Regulatory &amp; Compliance</a></li>
+                <li><a href="practice-areas.html#commercial">Commercial Transactions</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="about.html">About the Firm</a></li>
+                <li><a href="attorneys.html">Attorneys</a></li>
+                <li><a href="insights.html">Insights</a></li>
+                <li><a href="contact.html">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li><i data-lucide="map-pin"></i><span>New Delhi · Mumbai · Bengaluru</span></li>
+                <li><i data-lucide="phone"></i><span>+91 00000 00000</span></li>
+                <li><i data-lucide="mail"></i><span>contact@xlawfirm.in</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Disclaimer</a>
+            <a href="#">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
+<script>/* page logic handled by pages.js */
+</script>
+</body>
+</html>

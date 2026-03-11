@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice Areas — X Law Firm</title>
+<meta name="description" content="Explore X Law Firm's full range of practice areas including Corporate Law, Litigation, Regulatory Compliance, and Commercial Transactions." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/interactions.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<style>
+/* ── PRACTICE AREAS PAGE ─────────────────────────────── */
+.pa-intro {
+    padding: clamp(60px, 8svh, 100px) var(--inline-pad);
+    background: #fff;
+}
+
+.pa-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .pa-intro-grid { grid-template-columns: 1fr; }
+}
+
+/* Full-detail cards */
+.pa-detail-section {
+    position: relative;
+    padding: var(--section-pad) var(--inline-pad);
+    overflow: hidden;
+}
+
+.pa-detail-section:nth-child(odd) { background: var(--color-surface); }
+.pa-detail-section:nth-child(even) { background: #fff; }
+
+.pa-detail-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+
+.pa-detail-bg img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    opacity: 0.05;
+}
+
+.pa-detail-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+
+.pa-detail-section:nth-child(even) .pa-detail-grid {
+    direction: rtl;
+}
+
+.pa-detail-section:nth-child(even) .pa-detail-content,
+.pa-detail-section:nth-child(even) .pa-detail-visual {
+    direction: ltr;
+}
+
+@media (max-width: 900px) {
+    .pa-detail-grid { grid-template-columns: 1fr; direction: ltr !important; }
+}
+
+.pa-detail-number {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 700;
+    color: var(--color-border);
+    line-height: 1;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.pa-detail-content h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+
+.pa-detail-content p {
+    color: var(--color-muted);
+    line-height: 1.75;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+}
+
+.pa-services-list {
+    margin: 1.5rem 0 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.pa-services-list li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.pa-services-list li::before {
+    content: '';
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    flex-shrink: 0;
+}
+
+.pa-detail-visual {
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    position: relative;
+}
+
+.pa-detail-visual img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--ease-standard);
+}
+
+.pa-detail-visual:hover img { transform: scale(1.03); }
+
+/* Expertise grid overview */
+.pa-overview-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.pa-overview-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+
+.pa-overview-bg img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    opacity: 0.06;
+}
+
+.pa-overview-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(40px, 6svh, 64px);
+}
+
+@media (max-width: 900px) { .expertise-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .expertise-grid { grid-template-columns: 1fr; } }
+
+.expertise-item {
+    padding: 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    transition: background 240ms, border-color 240ms, transform 240ms;
+}
+
+.expertise-item:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.22);
+    transform: translateY(-3px);
+}
+
+.expertise-item h4 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.4rem;
+}
+
+.expertise-item p {
+    font-size: 0.82rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="index.html" class="logo">X Law Firm</a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="practice-areas.html" class="nav-link active">Practice Areas</a>
+            <a href="attorneys.html" class="nav-link">Attorneys</a>
+            <a href="insights.html" class="nav-link">Insights</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <a href="contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="attorneys.html" class="nav-link">Attorneys</a>
+        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ══ PAGE HERO ══════════════════════════════════════════════ -->
+<section class="page-hero">
+    <div class="page-hero-bg" data-parallax data-parallax-speed="0.3">
+        <img
+            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=1800&auto=format&fit=crop&q=80"
+            alt="Corporate boardroom"
+            fetchpriority="high"
+        />
+    </div>
+    <div class="page-hero-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Practice Areas</span>
+        </div>
+        <h1 class="page-title">Practice Areas</h1>
+        <p class="page-subtitle">
+            Comprehensive legal expertise across the full spectrum of corporate,
+            commercial, regulatory, and dispute-related matters.
+        </p>
+    </div>
+</section>
+
+<!-- ══ INTRO ══════════════════════════════════════════════════ -->
+<section class="pa-intro">
+    <div class="pa-intro-grid">
+        <div class="reveal">
+            <span class="section-label">Our Expertise</span>
+            <h2 class="section-title">Legal Counsel Across<br>Every Dimension</h2>
+        </div>
+        <div class="reveal">
+            <p style="color:var(--color-muted); line-height:1.75; margin-bottom:1rem;">
+                X Law Firm brings together attorneys with deep specialisation across
+                four core practice areas. Our cross-functional approach means that
+                complex matters spanning multiple disciplines are handled cohesively —
+                with one team, one strategy, and one point of accountability.
+            </p>
+            <p style="color:var(--color-muted); line-height:1.75;">
+                Whether you are navigating a high-stakes acquisition, a regulatory
+                investigation, or a multi-forum commercial dispute, our attorneys
+                provide counsel that is grounded, strategic, and results-oriented.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CORPORATE LAW ══════════════════════════════════════════ -->
+<section class="pa-detail-section" id="corporate-law">
+    <div class="pa-detail-bg" data-parallax data-parallax-speed="0.22">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="pa-detail-grid">
+        <div class="pa-detail-content reveal">
+            <span class="pa-detail-number">01</span>
+            <span class="section-label">Practice Area</span>
+            <h2>Corporate Law</h2>
+            <p>
+                We advise boards, management teams, and investors on the full range of
+                corporate matters — from incorporation and governance to complex
+                cross-border transactions and restructurings.
+            </p>
+            <p>
+                Our corporate practice combines technical legal expertise with a deep
+                understanding of business dynamics, enabling us to structure transactions
+                and governance frameworks that are legally sound and commercially practical.
+            </p>
+            <ul class="pa-services-list">
+                <li>Mergers, acquisitions, and divestitures</li>
+                <li>Corporate governance and board advisory</li>
+                <li>Joint ventures and strategic alliances</li>
+                <li>Cross-border transactions and restructuring</li>
+                <li>Due diligence and transaction management</li>
+                <li>Private equity and venture capital matters</li>
+            </ul>
+            <a href="practice/corporate-law.html" class="btn btn-primary">Explore Corporate Law</a>
+        </div>
+        <div class="pa-detail-visual reveal">
+            <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=900&auto=format&fit=crop&q=80" alt="Corporate law - business meeting">
+        </div>
+    </div>
+</section>
+
+<!-- ══ LITIGATION ═════════════════════════════════════════════ -->
+<section class="pa-detail-section" id="litigation">
+    <div class="pa-detail-bg" data-parallax data-parallax-speed="0.22">
+        <img src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="pa-detail-grid">
+        <div class="pa-detail-content reveal">
+            <span class="pa-detail-number">02</span>
+            <span class="section-label">Practice Area</span>
+            <h2>Litigation &amp; Dispute Resolution</h2>
+            <p>
+                When disputes arise, our litigation team provides skilled, strategic
+                representation across courts, tribunals, and arbitration forums. We focus
+                on efficient resolution without compromising on outcomes.
+            </p>
+            <p>
+                We represent clients in complex commercial litigation, arbitration
+                proceedings, and regulatory enforcement actions with a consistent
+                emphasis on risk management and cost-effectiveness.
+            </p>
+            <ul class="pa-services-list">
+                <li>Commercial litigation and arbitration</li>
+                <li>International dispute resolution</li>
+                <li>Enforcement of arbitral awards</li>
+                <li>Injunctions and urgent reliefs</li>
+                <li>Regulatory enforcement proceedings</li>
+                <li>Pre-litigation advisory and risk assessment</li>
+            </ul>
+            <a href="practice/litigation.html" class="btn btn-primary">Explore Litigation</a>
+        </div>
+        <div class="pa-detail-visual reveal">
+            <img src="https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=900&auto=format&fit=crop&q=80" alt="Litigation - courtroom">
+        </div>
+    </div>
+</section>
+
+<!-- ══ REGULATORY ═════════════════════════════════════════════ -->
+<section class="pa-detail-section" id="regulatory">
+    <div class="pa-detail-bg" data-parallax data-parallax-speed="0.22">
+        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="pa-detail-grid">
+        <div class="pa-detail-content reveal">
+            <span class="pa-detail-number">03</span>
+            <span class="section-label">Practice Area</span>
+            <h2>Regulatory &amp; Compliance</h2>
+            <p>
+                Navigating the regulatory environment requires a firm with deep
+                institutional knowledge and practical experience across sectors.
+                Our regulatory practice helps clients manage compliance obligations
+                proactively and respond to regulatory scrutiny effectively.
+            </p>
+            <p>
+                We work closely with sector regulators and have established relationships
+                across financial services, infrastructure, healthcare, and technology
+                regulatory bodies.
+            </p>
+            <ul class="pa-services-list">
+                <li>Regulatory strategy and licensing</li>
+                <li>Compliance programme design and audit</li>
+                <li>Sector-specific regulatory advice (SEBI, RBI, IRDAI)</li>
+                <li>Government investigations and enforcement</li>
+                <li>Policy advocacy and regulatory submissions</li>
+                <li>Anti-corruption and anti-money laundering</li>
+            </ul>
+            <a href="practice/regulatory.html" class="btn btn-primary">Explore Regulatory</a>
+        </div>
+        <div class="pa-detail-visual reveal">
+            <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=900&auto=format&fit=crop&q=80" alt="Regulatory compliance">
+        </div>
+    </div>
+</section>
+
+<!-- ══ COMMERCIAL ═════════════════════════════════════════════ -->
+<section class="pa-detail-section" id="commercial">
+    <div class="pa-detail-bg" data-parallax data-parallax-speed="0.22">
+        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="pa-detail-grid">
+        <div class="pa-detail-content reveal">
+            <span class="pa-detail-number">04</span>
+            <span class="section-label">Practice Area</span>
+            <h2>Commercial Transactions</h2>
+            <p>
+                Our commercial transactions practice covers the full lifecycle of
+                business agreements — from initial term sheets to complex multi-party
+                arrangements. We draft and negotiate with precision, anticipating issues
+                before they arise.
+            </p>
+            <p>
+                We act for buyers, sellers, lenders, and borrowers across a broad range
+                of industries and transaction types, bringing commercial acumen to
+                every engagement.
+            </p>
+            <ul class="pa-services-list">
+                <li>Commercial contracts and master agreements</li>
+                <li>Project finance and infrastructure agreements</li>
+                <li>Technology, IP, and licensing transactions</li>
+                <li>Real estate and property transactions</li>
+                <li>Supply chain and outsourcing agreements</li>
+                <li>Employment and labour agreements</li>
+            </ul>
+            <a href="practice/commercial.html" class="btn btn-primary">Explore Commercial</a>
+        </div>
+        <div class="pa-detail-visual reveal">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop&q=80" alt="Commercial transactions">
+        </div>
+    </div>
+</section>
+
+<!-- ══ EXPERTISE OVERVIEW ════════════════════════════════════ -->
+<section class="pa-overview-section">
+    <div class="pa-overview-bg" data-parallax data-parallax-speed="0.28">
+        <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="pa-overview-inner">
+        <div class="section-header reveal">
+            <span class="section-label light">Full Spectrum</span>
+            <h2 class="section-title light">Additional Areas of Expertise</h2>
+            <p class="section-intro light">
+                Beyond our four core practices, our attorneys advise on a range
+                of specialist and adjacent legal matters.
+            </p>
+        </div>
+        <div class="expertise-grid stagger-children">
+            <div class="expertise-item">
+                <h4>Intellectual Property</h4>
+                <p>Protection, registration, and enforcement of trademarks, patents, and copyrights.</p>
+            </div>
+            <div class="expertise-item">
+                <h4>Employment Law</h4>
+                <p>Advisory on workplace policies, terminations, and employment disputes.</p>
+            </div>
+            <div class="expertise-item">
+                <h4>Data Privacy</h4>
+                <p>DPDP compliance, data governance frameworks, and cross-border data transfer.</p>
+            </div>
+            <div class="expertise-item">
+                <h4>Competition Law</h4>
+                <p>CCI filings, merger control, and competition compliance programmes.</p>
+            </div>
+            <div class="expertise-item">
+                <h4>Tax Advisory</h4>
+                <p>Transaction tax, structuring advice, and tax dispute resolution.</p>
+            </div>
+            <div class="expertise-item">
+                <h4>Insolvency &amp; Restructuring</h4>
+                <p>IBC advisory, creditor representation, and corporate restructuring.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════════════ -->
+<section class="cta">
+    <div class="cta-parallax-bg" data-parallax data-parallax-speed="0.3">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="cta-inner">
+        <div class="cta-content reveal">
+            <h2>Need Counsel Across<br>Multiple Practice Areas?</h2>
+            <p>
+                Our cross-disciplinary teams work seamlessly together to provide
+                integrated advice on complex matters spanning multiple legal disciplines.
+            </p>
+            <div class="cta-actions">
+                <a href="contact.html" class="btn btn-white">Request a Consultation</a>
+                <a href="attorneys.html" class="btn btn-ghost">Meet Our Attorneys</a>
+            </div>
+        </div>
+        <div class="cta-assurance reveal">
+            <p>
+                All consultations are handled with strict confidentiality and professional discretion.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">X Law Firm</a>
+            <p>A full-service law firm providing strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="practice/corporate-law.html">Corporate Law</a></li>
+                <li><a href="practice/litigation.html">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="practice/regulatory.html">Regulatory &amp; Compliance</a></li>
+                <li><a href="practice/commercial.html">Commercial Transactions</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="about.html">About the Firm</a></li>
+                <li><a href="attorneys.html">Attorneys</a></li>
+                <li><a href="insights.html">Insights</a></li>
+                <li><a href="contact.html">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li><i data-lucide="map-pin"></i><span>New Delhi · Mumbai · Bengaluru</span></li>
+                <li><i data-lucide="phone"></i><span>+91 00000 00000</span></li>
+                <li><i data-lucide="mail"></i><span>contact@xlawfirm.in</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="legal/privacy.html">Privacy Policy</a>
+            <a href="legal/disclaimer.html">Disclaimer</a>
+            <a href="legal/terms.html">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+</body>
+</html>

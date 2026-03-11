@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Article — X Law Firm</title>
+<meta name="description" content="" id="metaDescription" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/interactions.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<style>
+/* ── ARTICLE PAGE ────────────────────────────────────── */
+
+/* Reading progress bar */
+.reading-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--color-accent);
+    z-index: 600;
+    width: 0%;
+    transition: width 80ms linear;
+}
+
+/* Article layout */
+.article-section {
+    padding: clamp(60px, 8svh, 100px) var(--inline-pad);
+    background: #fff;
+    position: relative;
+}
+
+.article-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+@media (max-width: 960px) {
+    .article-layout { grid-template-columns: 1fr; }
+    .article-sidebar { order: -1; }
+}
+
+/* Article body */
+.article-header {
+    margin-bottom: 2.5rem;
+}
+
+.article-category-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    border: 1px solid rgba(27,42,74,0.2);
+    border-radius: 2px;
+    padding: 4px 10px;
+    margin-bottom: 1.25rem;
+    background: rgba(27,42,74,0.04);
+}
+
+.article-main-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+}
+
+.article-meta-bar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 1rem 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 2rem;
+}
+
+.article-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+.article-meta-item svg { width: 13px; height: 13px; stroke-width: 1.5; }
+
+.article-meta-item.author {
+    font-weight: 500;
+    color: var(--color-text);
+}
+
+.article-hero-image {
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    aspect-ratio: 16/7;
+}
+
+.article-hero-image img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+}
+
+/* Typography for article body */
+.article-body {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--color-text);
+}
+
+.article-body h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.5rem, 2.5vw, 2rem);
+    font-weight: 600;
+    margin: 2.5rem 0 1rem;
+    line-height: 1.2;
+}
+
+.article-body h3 {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 2rem 0 0.75rem;
+}
+
+.article-body p { margin-bottom: 1.4rem; color: var(--color-muted); }
+
+.article-body ul, .article-body ol {
+    margin: 0 0 1.4rem 1.5rem;
+    color: var(--color-muted);
+}
+
+.article-body li { margin-bottom: 0.5rem; line-height: 1.75; }
+
+.article-body blockquote {
+    border-left: 3px solid var(--color-accent);
+    padding: 0.75rem 0 0.75rem 1.5rem;
+    margin: 2rem 0;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--color-text);
+    line-height: 1.5;
+}
+
+.article-body strong { font-weight: 600; color: var(--color-text); }
+
+.article-disclaimer {
+    margin-top: 3rem;
+    padding: 1.25rem 1.5rem;
+    background: var(--color-surface);
+    border-radius: 4px;
+    border-left: 3px solid var(--color-border);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+}
+
+/* Share bar */
+.article-share {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.article-share span {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.share-btn {
+    width: 36px; height: 36px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-muted);
+    cursor: pointer;
+    transition: border-color 200ms, color 200ms, background 200ms;
+    background: transparent;
+}
+
+.share-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: rgba(27,42,74,0.04);
+}
+
+.share-btn svg { width: 14px; height: 14px; stroke-width: 1.5; }
+
+/* Sidebar */
+.article-sidebar {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.sidebar-card {
+    padding: 22px 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: var(--color-surface);
+}
+
+.sidebar-card-title {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+}
+
+/* Author card */
+.sidebar-author-initials {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.75rem;
+}
+
+.sidebar-author-name {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.sidebar-author-role {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+}
+
+.sidebar-author-bio {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    margin-bottom: 1rem;
+}
+
+/* Table of contents */
+.toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.toc-link {
+    font-size: 0.82rem;
+    color: var(--color-muted);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    transition: color 200ms;
+    cursor: pointer;
+}
+
+.toc-link:last-child { border-bottom: none; }
+.toc-link:hover { color: var(--color-accent); }
+.toc-link.is-active { color: var(--color-accent); font-weight: 500; }
+
+.toc-link::before {
+    content: '';
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+    margin-top: 7px;
+}
+
+/* Related articles section */
+.related-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.related-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.related-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.04;
+}
+
+.related-inner {
+    position: relative; z-index: 2;
+}
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+@media (max-width: 900px) { .related-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .related-grid { grid-template-columns: 1fr; } }
+
+.related-card {
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 240ms, transform 240ms, box-shadow 240ms;
+}
+
+.related-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(27,42,74,0.08);
+}
+
+.related-card-img {
+    aspect-ratio: 16/9;
+    overflow: hidden;
+}
+
+.related-card-img img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: grayscale(15%);
+    transition: transform 400ms, filter 400ms;
+}
+
+.related-card:hover .related-card-img img { transform: scale(1.04); filter: grayscale(0%); }
+
+.related-card-body { padding: 20px 18px; }
+
+.related-card-cat {
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.5rem;
+}
+
+.related-card-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.25;
+    transition: color 220ms;
+}
+
+.related-card:hover .related-card-title { color: var(--color-accent); }
+
+/* Not found */
+.not-found {
+    min-height: 60svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--section-pad) var(--inline-pad);
+    gap: 1rem;
+}
+
+.not-found h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.not-found p { color: var(--color-muted); max-width: 40ch; }
+</style>
+</head>
+<body>
+
+<!-- Reading progress -->
+<div class="reading-progress" id="readingProgress"></div>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="index.html" class="logo">X Law Firm</a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+            <a href="attorneys.html" class="nav-link">Attorneys</a>
+            <a href="insights.html" class="nav-link active">Insights</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <a href="contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="attorneys.html" class="nav-link">Attorneys</a>
+        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ══ HERO ═══════════════════════════════════════════════════ -->
+<section class="page-hero" id="articleHero">
+    <div class="page-hero-bg" id="heroBg" data-parallax data-parallax-speed="0.3">
+        <img id="heroImg" src="" alt="" fetchpriority="high" />
+    </div>
+    <div class="page-hero-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <a href="insights.html">Insights</a>
+            <span>/</span>
+            <span id="heroBreadcrumb"></span>
+        </div>
+        <div id="heroCategory" class="section-label light" style="margin-bottom:1rem;"></div>
+        <h1 class="page-title" id="heroTitle" style="max-width:18ch;"></h1>
+    </div>
+</section>
+
+<!-- ══ ARTICLE BODY ═══════════════════════════════════════════ -->
+<section class="article-section" id="articleSection">
+    <div class="article-layout">
+
+        <!-- Main content -->
+        <div class="article-main">
+            <div class="article-header reveal">
+                <span class="article-category-tag" id="articleCategoryTag"></span>
+                <h1 class="article-main-title" id="articleTitle"></h1>
+                <div class="article-meta-bar">
+                    <div class="article-meta-item author">
+                        <i data-lucide="user"></i>
+                        <span id="articleAuthor"></span>
+                    </div>
+                    <div class="article-meta-item">
+                        <i data-lucide="calendar"></i>
+                        <span id="articleDate"></span>
+                    </div>
+                    <div class="article-meta-item">
+                        <i data-lucide="clock"></i>
+                        <span id="articleReadTime"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="article-hero-image reveal">
+                <img id="articleHeroImg" src="" alt="" />
+            </div>
+
+            <div class="article-body reveal" id="articleBody"></div>
+
+            <div class="article-disclaimer reveal">
+                <strong>Disclaimer:</strong> This article is intended for general informational purposes only and does not constitute legal advice.
+                The information contained herein may not reflect the most current legal developments. Readers should not act upon this
+                information without seeking specific legal counsel from a qualified attorney. X Law Firm accepts no liability for
+                any action taken in reliance on this article.
+            </div>
+
+            <div class="article-share reveal">
+                <span>Share</span>
+                <button class="share-btn" onclick="navigator.clipboard.writeText(window.location.href)" title="Copy link">
+                    <i data-lucide="link"></i>
+                </button>
+                <button class="share-btn" onclick="window.open('mailto:?subject='+encodeURIComponent(document.title)+'&body='+encodeURIComponent(window.location.href))" title="Share via email">
+                    <i data-lucide="mail"></i>
+                </button>
+                <button class="share-btn" onclick="window.print()" title="Print">
+                    <i data-lucide="printer"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <aside class="article-sidebar">
+            <!-- Author card -->
+            <div class="sidebar-card">
+                <div class="sidebar-card-title">Written By</div>
+                <div class="sidebar-author-initials" id="sidebarInitials"></div>
+                <div class="sidebar-author-name" id="sidebarAuthorName"></div>
+                <div class="sidebar-author-role" id="sidebarAuthorRole"></div>
+                <p class="sidebar-author-bio" id="sidebarAuthorBio"></p>
+                <a href="attorneys.html" class="btn btn-secondary" style="height:36px; font-size:0.78rem; width:100%; justify-content:center;">View Profile</a>
+            </div>
+
+            <!-- Table of contents -->
+            <div class="sidebar-card" id="tocCard">
+                <div class="sidebar-card-title">Contents</div>
+                <div class="toc-list" id="tocList"></div>
+            </div>
+
+            <!-- CTA card -->
+            <div class="sidebar-card" style="background:var(--color-accent); border-color:var(--color-accent);">
+                <div class="sidebar-card-title" style="color:rgba(255,255,255,0.5);">Need Advice?</div>
+                <p style="font-family:var(--font-heading); font-size:1.1rem; font-weight:600; color:#fff; line-height:1.3; margin-bottom:0.75rem;">
+                    Speak with an attorney about this matter.
+                </p>
+                <p style="font-size:0.8rem; color:rgba(255,255,255,0.6); line-height:1.6; margin-bottom:1rem;">
+                    All consultations are confidential and without obligation.
+                </p>
+                <a href="contact.html" class="btn btn-white" style="height:38px; font-size:0.8rem; width:100%; justify-content:center;">Request Consultation</a>
+            </div>
+        </aside>
+
+    </div>
+</section>
+
+<!-- Related articles -->
+<section class="related-section">
+    <div class="related-bg" data-parallax data-parallax-speed="0.2">
+        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="related-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Keep Reading</span>
+            <h2 class="section-title">Related Insights</h2>
+        </div>
+        <div class="related-grid stagger-children" id="relatedGrid"></div>
+    </div>
+</section>
+
+<!-- Not found -->
+<div class="not-found" id="notFound" style="display:none;">
+    <h2>Article Not Found</h2>
+    <p>The article you're looking for doesn't exist or the URL is incorrect.</p>
+    <a href="insights.html" class="btn btn-primary" style="margin-top:1rem;">Back to Insights</a>
+</div>
+
+<!-- Footer -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">X Law Firm</a>
+            <p>A full-service law firm providing strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="practice-areas.html#corporate-law">Corporate Law</a></li>
+                <li><a href="practice-areas.html#litigation">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="practice-areas.html#regulatory">Regulatory &amp; Compliance</a></li>
+                <li><a href="practice-areas.html#commercial">Commercial Transactions</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="about.html">About the Firm</a></li>
+                <li><a href="attorneys.html">Attorneys</a></li>
+                <li><a href="insights.html">Insights</a></li>
+                <li><a href="contact.html">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li><i data-lucide="map-pin"></i><span>New Delhi · Mumbai · Bengaluru</span></li>
+                <li><i data-lucide="phone"></i><span>+91 00000 00000</span></li>
+                <li><i data-lucide="mail"></i><span>contact@xlawfirm.in</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Disclaimer</a>
+            <a href="#">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ══ DATA + RENDERER ════════════════════════════════════════ -->
+<script>
+/* ============================================================
+   ARTICLE DATA
+   Add new articles here. Body is an array of content blocks:
+     { type: 'p' | 'h2' | 'h3' | 'ul' | 'ol' | 'quote', content: '...' | [...] }
+   ============================================================ */
+
+const AUTHORS = {
+    'arjun-mehta':     { name: 'Arjun Mehta',     role: 'Senior Partner',           initials: 'AM', bio: 'Arjun leads the corporate practice with 22+ years advising on M&A, cross-border transactions, and private equity matters.' },
+    'priya-sharma':    { name: 'Priya Sharma',     role: 'Partner — Litigation',     initials: 'PS', bio: 'Priya is a leading commercial litigator with 18 years of experience before the Supreme Court, High Courts, and international arbitration forums.' },
+    'vikram-nair':     { name: 'Vikram Nair',      role: 'Partner — Regulatory',     initials: 'VN', bio: 'Vikram heads the regulatory practice, advising on licensing, compliance frameworks, and government investigations across regulated industries.' },
+    'ananya-kulkarni': { name: 'Ananya Kulkarni',  role: 'Senior Associate',         initials: 'AK', bio: 'Ananya focuses on M&A transactions and venture capital matters, with particular expertise in the technology and startup sectors.' },
+    'meera-iyer':      { name: 'Meera Iyer',       role: 'Associate',                initials: 'MI', bio: 'Meera advises on data privacy, DPDP compliance, and competition law for technology and fintech businesses.' },
+};
+
+const ARTICLES = {
+
+  'cross-border-transactions': {
+    title:    'Key Considerations in Cross-Border Transactions: A 2026 Perspective',
+    category: 'Corporate Law',
+    author:   'arjun-mehta',
+    date:     'January 2026',
+    readTime: '8 min read',
+    heroImg:  'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'Cross-border transactions have grown significantly more complex in the post-pandemic regulatory environment. Geopolitical shifts, evolving foreign exchange regulations, and increased scrutiny from competition authorities have added layers of legal and commercial risk to deals that might once have been relatively straightforward.' },
+      { type: 'h2', content: 'The Regulatory Landscape in 2026' },
+      { type: 'p', content: 'India\'s approach to inbound foreign investment has continued to evolve. The Foreign Exchange Management Act framework, administered by the Reserve Bank of India, now intersects more frequently with sectoral regulations — particularly in financial services, technology, and defence. Practitioners must map the applicable framework carefully before structuring any inbound deal.' },
+      { type: 'p', content: 'Press Note 3 of 2020, which introduced prior government approval for investment from countries sharing a land border with India, remains operative. Transactions involving Chinese or Pakistani investors — even through intermediate holding structures — continue to require Foreign Investment Facilitation Portal approval and are subject to heightened scrutiny.' },
+      { type: 'h2', content: 'Due Diligence in a Multi-Jurisdictional Context' },
+      { type: 'p', content: 'Multi-jurisdictional due diligence requires coordination across legal teams in each relevant jurisdiction. Common failure points include inconsistent reporting formats, different materiality thresholds, and failure to identify cross-border tax implications early enough to influence deal structure.' },
+      { type: 'quote', content: 'The most expensive due diligence mistakes are not the ones that surface during the process — they are the ones that surface twelve months after closing.' },
+      { type: 'ul', content: [
+          'Regulatory approvals: map all required filings across jurisdictions before signing',
+          'Tax structure: engage tax counsel early — structure affects price and timeline',
+          'Employment: cross-border transactions often trigger transfer-of-undertaking rules',
+          'Data privacy: DPDP compliance now a standard closing condition for tech deals',
+          'Competition: mandatory CCI notification thresholds reviewed — check current turnover tests',
+      ]},
+      { type: 'h2', content: 'Competition Clearance: Timing Considerations' },
+      { type: 'p', content: 'CCI merger filings remain mandatory where the combined turnover or asset thresholds are met. The 2023 amendments to the Competition Act introduced a "deal value" threshold — transactions where the deal value exceeds ₹2,000 crore and the target has substantial business operations in India now require CCI notification, regardless of turnover. This catches a significantly larger number of technology and startup deals.' },
+      { type: 'p', content: 'Phase I review takes up to 30 working days. Phase II — which applies to transactions raising serious concerns — extends to 210 working days. For deal timelines, CCI clearance must be factored into the long-stop date from the outset.' },
+      { type: 'h2', content: 'Practical Recommendations' },
+      { type: 'p', content: 'Based on our experience advising on cross-border transactions in 2025 and into 2026, we recommend the following approach for any deal with an Indian component:' },
+      { type: 'ol', content: [
+          'Engage Indian counsel at term sheet stage — regulatory risk affects valuation',
+          'Conduct a regulatory mapping exercise before signing any exclusivity',
+          'Include adequate long-stop dates to accommodate RBI, CCI, and sectoral approvals',
+          'Build representation and warranty insurance into your deal protection framework',
+          'Ensure your data room is structured for multi-jurisdictional review from day one',
+      ]},
+      { type: 'p', content: 'Cross-border transactions reward careful preparation. The firms that close successfully are those that identify regulatory and legal risks early, price them accurately, and structure around them before they become deal-breakers.' },
+    ],
+    related: ['commercial-disputes', 'regulatory-developments', 'esg-obligations'],
+  },
+
+  'commercial-disputes': {
+    title:    'Managing Risk in High-Value Commercial Disputes',
+    category: 'Litigation',
+    author:   'priya-sharma',
+    date:     'January 2026',
+    readTime: '6 min read',
+    heroImg:  'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'High-value commercial disputes carry consequences that extend far beyond the immediate financial exposure. Reputational damage, management distraction, and the destruction of business relationships are often more costly than the sums in dispute. Effective dispute risk management begins before a dispute is even formally raised.' },
+      { type: 'h2', content: 'Pre-Dispute: The Value of Early Advice' },
+      { type: 'p', content: 'The most common mistake in high-value disputes is delay. By the time a formal notice or plaint has been received, much of the strategic ground has already been ceded. Early legal advice — when a commercial relationship first shows signs of strain — allows for options that are simply unavailable later: negotiated variation, without-prejudice settlement, or evidence preservation.' },
+      { type: 'quote', content: 'The best dispute is the one that never reaches a forum. The second best is the one that reaches the right forum with the right evidence from the outset.' },
+      { type: 'h2', content: 'Choosing the Right Forum' },
+      { type: 'p', content: 'The forum — court, arbitration, or specialist tribunal — fundamentally shapes the timeline, cost, and outcome of a dispute. International arbitration offers confidentiality and award enforceability across 170+ countries under the New York Convention. Domestic commercial courts under the Commercial Courts Act offer faster processes than the general civil system, but lack the confidentiality of arbitration.' },
+      { type: 'ul', content: [
+          'SIAC and ICC arbitration: preferred for cross-border disputes with international counterparts',
+          'DIAC and MCIA: emerging Indian-seated options with growing credibility',
+          'Commercial Courts: suitable for domestic disputes where speed and cost are priorities',
+          'NCLT: essential for insolvency-related claims against corporate counterparties',
+      ]},
+      { type: 'h2', content: 'Evidence Preservation and Documentation' },
+      { type: 'p', content: 'In a commercial dispute, the party with better documentation almost always has the advantage. This means preserving email threads, board minutes, WhatsApp communications, and contract execution records from the moment a dispute is anticipated. Failure to preserve evidence — or worse, destruction of evidence — can be catastrophic for the merits of your case and may itself give rise to adverse inferences.' },
+      { type: 'h2', content: 'Settlement: When and How' },
+      { type: 'p', content: 'Most high-value commercial disputes settle — the question is when and at what cost. Early settlement almost always produces better outcomes than late settlement, because litigation costs, management time, and reputational exposure have not yet compounded. A well-advised party will assess settlement prospects continuously and maintain negotiating channels throughout the dispute process.' },
+    ],
+    related: ['cross-border-transactions', 'regulatory-developments', 'ibc-nine-years'],
+  },
+
+  'regulatory-developments': {
+    title:    'Recent Developments in Regulatory Compliance: What Businesses Must Know',
+    category: 'Regulatory',
+    author:   'vikram-nair',
+    date:     'December 2025',
+    readTime: '7 min read',
+    heroImg:  'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'India\'s regulatory environment has seen significant activity in the second half of 2025. From the operationalisation of the Digital Personal Data Protection Act to updated SEBI disclosure norms and revised RBI prudential guidelines, businesses are navigating a period of compressed regulatory change.' },
+      { type: 'h2', content: 'DPDP Act: Implementation Timeline' },
+      { type: 'p', content: 'The Digital Personal Data Protection Act, 2023 has moved steadily toward operationalisation. The Data Protection Board is expected to be constituted in early 2026, at which point the enforcement mechanisms of the Act will become live. Businesses must have their compliance programmes in place before this date.' },
+      { type: 'ul', content: [
+          'Privacy notices must be in plain language and purpose-specific',
+          'Consent must be freely given, specific, informed, and withdrawable',
+          'Significant data fiduciaries face enhanced obligations including DPO appointment',
+          'Cross-border data transfers require government approval for notified countries',
+          'Breach notification to the Board required within 72 hours of discovery',
+      ]},
+      { type: 'h2', content: 'SEBI\'s Updated ESG Disclosure Framework' },
+      { type: 'p', content: 'SEBI\'s revised Business Responsibility and Sustainability Reporting framework now applies to the top 1,000 listed entities by market capitalisation. The revised framework requires more granular disclosures across nine principles of responsible business conduct, with a particular focus on supply chain sustainability and Scope 3 emissions.' },
+      { type: 'quote', content: 'Regulatory compliance is no longer just a legal function. It is a board-level governance matter that requires cross-functional ownership.' },
+      { type: 'h2', content: 'RBI\'s Revised Guidelines for NBFCs' },
+      { type: 'p', content: 'The Reserve Bank of India\'s scale-based regulation framework for NBFCs has materially changed compliance requirements for larger non-banking financial companies. NBFCs classified as NBFC-UL (Upper Layer) are now subject to near-bank level regulatory obligations, including mandatory listing requirements and enhanced corporate governance standards.' },
+      { type: 'h2', content: 'What Should Businesses Do Now?' },
+      { type: 'ol', content: [
+          'Commission a compliance gap analysis against the DPDP Act requirements',
+          'Review your data processing activities and update privacy notices',
+          'Assess BRSR disclosure obligations if you are a listed entity',
+          'Map your NBFC classification under the scale-based framework',
+          'Engage your board\'s audit committee on the regulatory change agenda',
+      ]},
+    ],
+    related: ['cross-border-transactions', 'dpdp-act', 'esg-obligations'],
+  },
+
+  'force-majeure': {
+    title:    'Drafting for Resilience: Force Majeure Clauses Post-Pandemic',
+    category: 'Commercial',
+    author:   'ananya-kulkarni',
+    date:     'November 2025',
+    readTime: '5 min read',
+    heroImg:  'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'The pandemic exposed significant drafting weaknesses in commercial contracts across every sector. Force majeure clauses that had been treated as boilerplate for decades were suddenly at the centre of high-value disputes — and many were found wanting.' },
+      { type: 'h2', content: 'What the Pandemic Revealed' },
+      { type: 'p', content: 'Courts in India and internationally took varying approaches to pandemic-related force majeure claims. The Supreme Court\'s decision in Energy Watchdog v CERC established that force majeure clauses are to be interpreted narrowly — the event must render performance impossible, not merely more difficult or expensive.' },
+      { type: 'quote', content: 'A force majeure clause that does not specifically address supply chain disruption, government orders, and epidemic events is a clause that will fail you when you need it most.' },
+      { type: 'h2', content: 'Drafting Recommendations' },
+      { type: 'ul', content: [
+          'Define force majeure events exhaustively — do not rely on open-ended catch-alls',
+          'Explicitly include pandemics, epidemics, and government-mandated shutdowns',
+          'Address supply chain disruption as a separate category from acts of God',
+          'Specify notice periods and documentation requirements precisely',
+          'Include mitigation obligations to prevent abuse of the clause',
+          'Consider MAC clauses alongside force majeure for M&A contracts',
+      ]},
+      { type: 'h2', content: 'Looking Ahead' },
+      { type: 'p', content: 'Climate-related disruption is the next frontier for force majeure drafting. Businesses in sectors exposed to weather events, flooding, or resource scarcity should be reviewing their contract portfolios for climate-related gaps — before those events occur.' },
+    ],
+    related: ['commercial-disputes', 'cross-border-transactions', 'regulatory-developments'],
+  },
+
+  'esg-obligations': {
+    title:    'ESG Obligations for Listed Companies: What\'s Changing in 2026',
+    category: 'Corporate Law',
+    author:   'arjun-mehta',
+    date:     'October 2025',
+    readTime: '6 min read',
+    heroImg:  'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'Environmental, social, and governance considerations have moved from the periphery to the centre of listed company obligations in India. SEBI\'s framework has evolved rapidly, and boards that treat ESG as a disclosure exercise — rather than a governance imperative — are taking on legal and reputational risk.' },
+      { type: 'h2', content: 'BRSR Core: The New Mandatory Layer' },
+      { type: 'p', content: 'SEBI\'s introduction of BRSR Core — a subset of mandatory, assurance-backed disclosures within the BRSR framework — represents a significant escalation. Unlike general BRSR disclosures, BRSR Core items require third-party assurance, meaning listed companies must now commission independent verification of key ESG metrics.' },
+      { type: 'h2', content: 'Supply Chain Disclosure Requirements' },
+      { type: 'p', content: 'A critical and often overlooked element of the updated framework is the requirement for listed companies to disclose ESG parameters across their supply chain. This extends the compliance burden to suppliers and vendors who may not themselves be subject to SEBI regulation — but whose practices now affect the disclosures of listed entities.' },
+      { type: 'ul', content: [
+          'Top listed entities must report supply chain ESG metrics from FY 2025-26',
+          'Supplier code of conduct policies require board approval and disclosure',
+          'Human rights due diligence across supply chain is now explicitly required',
+          'Scope 3 emissions reporting guidance expected from SEBI in H1 2026',
+      ]},
+      { type: 'h2', content: 'Board Accountability' },
+      { type: 'p', content: 'SEBI has been clear that ESG disclosures are the responsibility of the board — not just the compliance function. Directors who sign off on inaccurate or misleading sustainability disclosures face potential enforcement action. Boards should be conducting their own review of ESG disclosure practices, not simply delegating the task.' },
+    ],
+    related: ['regulatory-developments', 'cross-border-transactions', 'force-majeure'],
+  },
+
+  'dpdp-act': {
+    title:    'DPDP Act: What Businesses Must Do Now',
+    category: 'Regulatory',
+    author:   'meera-iyer',
+    date:     'September 2025',
+    readTime: '7 min read',
+    heroImg:  'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'India\'s Digital Personal Data Protection Act, 2023 is moving rapidly from legislation to enforcement. With the Data Protection Board\'s constitution expected in early 2026, businesses that have not begun their compliance journey are already behind. This article sets out the key obligations and a practical roadmap for compliance.' },
+      { type: 'h2', content: 'Who Does the DPDP Act Apply To?' },
+      { type: 'p', content: 'The Act applies to the processing of digital personal data in India, as well as to processing outside India where it is in connection with offering goods or services to data principals in India. This extraterritorial scope is broad — businesses with Indian customers or users, wherever they are incorporated, must comply.' },
+      { type: 'h2', content: 'Key Obligations' },
+      { type: 'ul', content: [
+          'Notice: clear, plain-language notice of data processing before collection',
+          'Consent: freely given, specific, informed, and unconditional',
+          'Purpose limitation: data used only for the purpose specified at collection',
+          'Data minimisation: collect only what is necessary',
+          'Accuracy: reasonable efforts to ensure personal data is accurate',
+          'Storage limitation: retain only as long as necessary for the stated purpose',
+          'Breach notification: notify the Board within 72 hours of a breach',
+      ]},
+      { type: 'h2', content: 'Significant Data Fiduciaries' },
+      { type: 'p', content: 'Entities notified as Significant Data Fiduciaries face enhanced obligations: mandatory appointment of a Data Protection Officer, independent data audits, and data protection impact assessments for high-risk processing activities. The government is expected to notify the first list of SDFs in early 2026 — businesses in financial services, health, and large-scale consumer technology should prepare for this designation.' },
+      { type: 'quote', content: 'The DPDP Act is not a compliance exercise. It is a fundamental shift in how businesses must think about data — not as an asset to be collected and retained, but as something held in trust for the people it relates to.' },
+      { type: 'h2', content: 'Compliance Roadmap' },
+      { type: 'ol', content: [
+          'Data mapping: catalogue all personal data you collect, store, and process',
+          'Consent framework: audit current consent mechanisms against DPDP requirements',
+          'Privacy notices: rewrite for plain language and DPDP specificity',
+          'Vendor agreements: update data processing agreements with all processors',
+          'Breach response plan: establish incident response and notification procedures',
+          'DPO appointment: assess whether you are likely to be notified as an SDF',
+      ]},
+    ],
+    related: ['regulatory-developments', 'esg-obligations', 'force-majeure'],
+  },
+
+  'ibc-nine-years': {
+    title:    'IBC at Nine: Key Lessons for Creditors and Debtors',
+    category: 'Litigation',
+    author:   'priya-sharma',
+    date:     'August 2025',
+    readTime: '8 min read',
+    heroImg:  'https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=1400&auto=format&fit=crop&q=80',
+    body: [
+      { type: 'p', content: 'The Insolvency and Bankruptcy Code came into force in 2016 with the explicit purpose of resolving insolvency within a time-bound framework. Nine years later, the code has produced a rich body of case law, significant Supreme Court jurisprudence, and important lessons for both creditors and debtors navigating financial distress.' },
+      { type: 'h2', content: 'What the Numbers Tell Us' },
+      { type: 'p', content: 'Resolution under the IBC remains faster than the pre-code regime — but the 180-day target has consistently been breached in practice. The average resolution timeline for corporate insolvency proceedings has grown, driven by litigation at every stage of the process. This has two implications: creditors must have realistic timeline expectations, and debtors who trigger the IBC must be prepared for a process that will consume management bandwidth for 18-24 months.' },
+      { type: 'h2', content: 'Critical Lessons for Financial Creditors' },
+      { type: 'ul', content: [
+          'Documentation of debt is fundamental — flawed loan documentation creates litigation risk at admission stage',
+          'Committee of Creditors decisions require careful management — CoC liability has expanded',
+          'Resolution plan evaluation criteria must be strictly applied — courts have set aside CoC approvals for non-compliance',
+          'Liquidation is no longer a last resort — consider it alongside resolution',
+          'Personal guarantor insolvency is now a creditor tool that should be used strategically',
+      ]},
+      { type: 'h2', content: 'Lessons for Corporate Debtors' },
+      { type: 'p', content: 'For companies in financial distress, the IBC framework offers a restructuring tool — but one that requires early engagement with creditors and professional advisers. Pre-packaged insolvency resolution processes, introduced in 2021, offer a faster pathway for MSMEs. For larger companies, the CIRP process remains the primary vehicle, but it is increasingly possible to negotiate a pre-admission framework that improves the debtor\'s position going into the process.' },
+      { type: 'quote', content: 'The IBC has fundamentally shifted the debtor-creditor balance in India. Creditors have real leverage. Debtors who ignore financial distress until a Section 7 application lands at NCLT are ceding all their negotiating options.' },
+    ],
+    related: ['commercial-disputes', 'regulatory-developments', 'cross-border-transactions'],
+  },
+
+};
+
+/* ============================================================
+   RENDERER
+   ============================================================ */
+(function render() {
+    const id   = new URLSearchParams(window.location.search).get('id');
+    const data = ARTICLES[id];
+
+    if (!data) {
+        document.getElementById('articleHero').style.display    = 'none';
+        document.getElementById('articleSection').style.display = 'none';
+        document.querySelector('.related-section').style.display = 'none';
+        document.getElementById('notFound').style.display       = 'flex';
+        document.title = 'Article Not Found — X Law Firm';
+        return;
+    }
+
+    const author = AUTHORS[data.author] || {};
+
+    /* ── META ─── */
+    document.title = data.title + ' — X Law Firm';
+    document.getElementById('metaDescription').content = data.title;
+
+    /* ── HERO ─── */
+    document.getElementById('heroImg').src          = data.heroImg;
+    document.getElementById('heroImg').alt          = data.title;
+    document.getElementById('heroBreadcrumb').textContent = data.category;
+    document.getElementById('heroCategory').textContent  = data.category;
+    document.getElementById('heroTitle').textContent     = data.title;
+
+    /* ── ARTICLE HEADER ─── */
+    document.getElementById('articleCategoryTag').textContent = data.category;
+    document.getElementById('articleTitle').textContent       = data.title;
+    document.getElementById('articleAuthor').textContent      = author.name || '';
+    document.getElementById('articleDate').textContent        = data.date;
+    document.getElementById('articleReadTime').textContent    = data.readTime;
+    document.getElementById('articleHeroImg').src             = data.heroImg;
+    document.getElementById('articleHeroImg').alt             = data.title;
+
+    /* ── BODY ─── */
+    const bodyEl = document.getElementById('articleBody');
+    const headings = [];
+
+    data.body.forEach(block => {
+        let el;
+        switch (block.type) {
+            case 'h2':
+                el = document.createElement('h2');
+                el.textContent = block.content;
+                el.id = 'section-' + headings.length;
+                headings.push({ id: el.id, text: block.content });
+                break;
+            case 'h3':
+                el = document.createElement('h3');
+                el.textContent = block.content;
+                break;
+            case 'p':
+                el = document.createElement('p');
+                el.textContent = block.content;
+                break;
+            case 'quote':
+                el = document.createElement('blockquote');
+                el.textContent = block.content;
+                break;
+            case 'ul':
+            case 'ol':
+                el = document.createElement(block.type);
+                block.content.forEach(item => {
+                    const li = document.createElement('li');
+                    li.textContent = item;
+                    el.appendChild(li);
+                });
+                break;
+        }
+        if (el) bodyEl.appendChild(el);
+    });
+
+    /* ── SIDEBAR AUTHOR ─── */
+    document.getElementById('sidebarInitials').textContent  = author.initials || '';
+    document.getElementById('sidebarAuthorName').textContent = author.name || '';
+    document.getElementById('sidebarAuthorRole').textContent = author.role || '';
+    document.getElementById('sidebarAuthorBio').textContent  = author.bio  || '';
+
+    /* ── TABLE OF CONTENTS ─── */
+    const tocList = document.getElementById('tocList');
+    if (headings.length) {
+        headings.forEach(h => {
+            const a = document.createElement('div');
+            a.className = 'toc-link';
+            a.textContent = h.text;
+            a.addEventListener('click', () => {
+                document.getElementById(h.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            tocList.appendChild(a);
+        });
+    } else {
+        document.getElementById('tocCard').style.display = 'none';
+    }
+
+    /* ── RELATED ARTICLES ─── */
+    const relatedGrid = document.getElementById('relatedGrid');
+    const relatedIds  = (data.related || []).slice(0, 3);
+    relatedIds.forEach(rid => {
+        const r = ARTICLES[rid];
+        if (!r) return;
+        relatedGrid.insertAdjacentHTML('beforeend', `
+            <a href="article.html?id=${rid}" class="related-card">
+                <div class="related-card-img">
+                    <img src="${r.heroImg}" alt="${r.title}" loading="lazy">
+                </div>
+                <div class="related-card-body">
+                    <div class="related-card-cat">${r.category}</div>
+                    <div class="related-card-title">${r.title}</div>
+                </div>
+            </a>`);
+    });
+
+    /* ── ICONS ─── */
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    /* ── ACTIVE TOC HIGHLIGHT ─── */
+    if (headings.length) {
+        const tocLinks = tocList.querySelectorAll('.toc-link');
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(l => l.classList.remove('is-active'));
+                    const idx = headings.findIndex(h => h.id === entry.target.id);
+                    if (idx >= 0 && tocLinks[idx]) tocLinks[idx].classList.add('is-active');
+                }
+            });
+        }, { rootMargin: '-20% 0px -70% 0px' });
+
+        headings.forEach(h => {
+            const el = document.getElementById(h.id);
+            if (el) observer.observe(el);
+        });
+    }
+
+})();
+
+/* ── READING PROGRESS BAR ────────────────────────────────── */
+window.addEventListener('scroll', () => {
+    const doc     = document.documentElement;
+    const scrolled = doc.scrollTop;
+    const total   = doc.scrollHeight - doc.clientHeight;
+    const pct     = total > 0 ? (scrolled / total) * 100 : 0;
+    document.getElementById('readingProgress').style.width = pct + '%';
+}, { passive: true });
+</script>
+
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
+</body>
+</html>

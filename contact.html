@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contact — X Law Firm</title>
+<meta name="description" content="Get in touch with X Law Firm to schedule a confidential consultation with one of our experienced attorneys." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/interactions.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<style>
+/* ── CONTACT PAGE ────────────────────────────────────── */
+
+.contact-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.contact-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.04;
+}
+
+.contact-grid {
+    position: relative; z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+@media (max-width: 900px) { .contact-grid { grid-template-columns: 1fr; } }
+
+/* ── CONTACT INFO SIDE ───────────────────────────────── */
+.contact-info h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+
+.contact-info > p {
+    color: var(--color-muted);
+    line-height: 1.75;
+    margin-bottom: 2.5rem;
+    font-size: 0.95rem;
+}
+
+.contact-details {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.contact-detail-item {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.contact-icon {
+    width: 40px; height: 40px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    background: var(--color-surface);
+}
+
+.contact-icon svg {
+    width: 16px; height: 16px;
+    stroke-width: 1.5;
+    color: var(--color-accent);
+}
+
+.contact-detail-text h4 {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.25rem;
+}
+
+.contact-detail-text p, .contact-detail-text a {
+    font-size: 0.9rem;
+    color: var(--color-text);
+    line-height: 1.5;
+    transition: color 200ms;
+}
+
+.contact-detail-text a:hover { color: var(--color-accent); }
+
+/* Office tabs */
+.office-tabs {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+}
+
+.office-tab {
+    height: 32px;
+    padding-inline: 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    background: transparent;
+    cursor: pointer;
+    transition: all 200ms;
+}
+
+.office-tab.is-active, .office-tab:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.office-panel { display: none; }
+.office-panel.is-active { display: flex; flex-direction: column; gap: 0.6rem; }
+
+.office-address-line {
+    display: flex;
+    gap: 8px;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    align-items: flex-start;
+}
+
+.office-address-line svg {
+    width: 13px; height: 13px;
+    stroke-width: 1.5;
+    flex-shrink: 0;
+    margin-top: 3px;
+    color: var(--color-accent);
+}
+
+/* ── FORM SIDE ───────────────────────────────────────── */
+.contact-form-wrap {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    padding: clamp(28px, 4vw, 48px);
+}
+
+.contact-form-wrap h3 {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.contact-form-wrap > p {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+@media (max-width: 580px) { .form-row { grid-template-columns: 1fr; } }
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-text);
+}
+
+.form-label .required {
+    color: #c0392b;
+    margin-left: 2px;
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    color: var(--color-text);
+    background: #fff;
+    outline: none;
+    transition: border-color 220ms, box-shadow 220ms;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder { color: #b0b0b0; }
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgba(27,42,74,0.08);
+}
+
+.form-input.has-error,
+.form-select.has-error,
+.form-textarea.has-error {
+    border-color: #c0392b;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.08);
+}
+
+.form-error {
+    font-size: 0.72rem;
+    color: #c0392b;
+    display: none;
+    align-items: center;
+    gap: 4px;
+}
+
+.form-error.is-visible { display: flex; }
+.form-error svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+.form-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b6b6b' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+}
+
+.form-textarea {
+    resize: vertical;
+    min-height: 120px;
+    line-height: 1.6;
+}
+
+.form-checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.form-checkbox {
+    width: 16px; height: 16px;
+    margin-top: 2px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.form-checkbox-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    line-height: 1.55;
+    cursor: pointer;
+}
+
+.form-checkbox-label a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.form-submit-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-confidential {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+.form-confidential svg {
+    width: 13px; height: 13px;
+    flex-shrink: 0;
+    color: var(--color-accent);
+}
+
+/* Form submission state */
+.form-success {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1rem;
+    gap: 1rem;
+}
+
+.form-success-icon {
+    width: 56px; height: 56px;
+    border-radius: 50%;
+    background: rgba(27,42,74,0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-success-icon svg {
+    width: 26px; height: 26px;
+    color: var(--color-accent);
+}
+
+.form-success h4 {
+    font-family: var(--font-heading);
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.form-success p {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    max-width: 40ch;
+    line-height: 1.65;
+}
+
+/* FAQ Section */
+.faq-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.faq-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.faq-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.04;
+}
+
+.faq-inner {
+    position: relative; z-index: 2;
+    max-width: 760px;
+}
+
+.faq-list {
+    margin-top: clamp(36px, 5svh, 60px);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--color-border);
+}
+
+.faq-item {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--color-text);
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    transition: color 220ms;
+}
+
+.faq-question:hover { color: var(--color-accent); }
+
+.faq-icon {
+    width: 28px; height: 28px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 220ms, border-color 220ms, transform 300ms;
+}
+
+.faq-icon svg {
+    width: 13px; height: 13px;
+    stroke-width: 2;
+    transition: transform 300ms var(--ease-standard);
+}
+
+.faq-item.is-open .faq-icon {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.faq-item.is-open .faq-icon svg {
+    color: #fff;
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height 380ms var(--ease-standard);
+}
+
+.faq-answer-inner {
+    padding-bottom: 1.25rem;
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    line-height: 1.75;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="index.html" class="logo">X Law Firm</a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+            <a href="attorneys.html" class="nav-link">Attorneys</a>
+            <a href="insights.html" class="nav-link">Insights</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link active">Contact</a>
+        </nav>
+        <a href="contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="attorneys.html" class="nav-link">Attorneys</a>
+        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ══ PAGE HERO ══════════════════════════════════════════════ -->
+<section class="page-hero">
+    <div class="page-hero-bg" data-parallax data-parallax-speed="0.3">
+        <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1800&auto=format&fit=crop&q=80"
+            alt="Contact X Law Firm"
+            fetchpriority="high"
+        />
+    </div>
+    <div class="page-hero-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Contact</span>
+        </div>
+        <h1 class="page-title">Get in Touch</h1>
+        <p class="page-subtitle">
+            Speak with one of our attorneys to understand your legal position
+            and explore your options — in complete confidence.
+        </p>
+    </div>
+</section>
+
+<!-- ══ CONTACT ════════════════════════════════════════════════ -->
+<section class="contact-section">
+    <div class="contact-bg" data-parallax data-parallax-speed="0.2">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="contact-grid">
+
+        <!-- Info side -->
+        <div class="contact-info reveal">
+            <span class="section-label">Contact Us</span>
+            <h2>We Are Here<br>When You Need Us</h2>
+            <p>
+                Whether you need immediate legal advice or want to explore a potential
+                engagement, our team is available across all three offices and responds
+                to all enquiries within one business day.
+            </p>
+
+            <div class="contact-details">
+                <div class="contact-detail-item">
+                    <div class="contact-icon"><i data-lucide="phone"></i></div>
+                    <div class="contact-detail-text">
+                        <h4>Main Line</h4>
+                        <a href="tel:+910000000000">+91 00000 00000</a>
+                    </div>
+                </div>
+                <div class="contact-detail-item">
+                    <div class="contact-icon"><i data-lucide="mail"></i></div>
+                    <div class="contact-detail-text">
+                        <h4>General Enquiries</h4>
+                        <a href="mailto:contact@xlawfirm.in">contact@xlawfirm.in</a>
+                    </div>
+                </div>
+                <div class="contact-detail-item">
+                    <div class="contact-icon"><i data-lucide="clock"></i></div>
+                    <div class="contact-detail-text">
+                        <h4>Office Hours</h4>
+                        <p>Monday – Friday, 9:00 AM – 6:30 PM IST<br>Urgent matters: available on request</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Office selector -->
+            <div class="section-label" style="margin-bottom:0.75rem;">Office Locations</div>
+            <div class="office-tabs">
+                <button class="office-tab is-active" data-office="delhi">New Delhi</button>
+                <button class="office-tab" data-office="mumbai">Mumbai</button>
+                <button class="office-tab" data-office="bengaluru">Bengaluru</button>
+            </div>
+
+            <div class="office-panel is-active" id="panel-delhi">
+                <div class="office-address-line"><i data-lucide="map-pin"></i><span>14, Barakhamba Road, Connaught Place, New Delhi — 110 001</span></div>
+                <div class="office-address-line"><i data-lucide="phone"></i><span>+91 11 0000 0000</span></div>
+                <div class="office-address-line"><i data-lucide="mail"></i><span>delhi@xlawfirm.in</span></div>
+            </div>
+            <div class="office-panel" id="panel-mumbai">
+                <div class="office-address-line"><i data-lucide="map-pin"></i><span>Level 22, One BKC, Bandra Kurla Complex, Mumbai — 400 051</span></div>
+                <div class="office-address-line"><i data-lucide="phone"></i><span>+91 22 0000 0000</span></div>
+                <div class="office-address-line"><i data-lucide="mail"></i><span>mumbai@xlawfirm.in</span></div>
+            </div>
+            <div class="office-panel" id="panel-bengaluru">
+                <div class="office-address-line"><i data-lucide="map-pin"></i><span>Embassy GolfLinks, Off Intermediate Ring Road, Bengaluru — 560 071</span></div>
+                <div class="office-address-line"><i data-lucide="phone"></i><span>+91 80 0000 0000</span></div>
+                <div class="office-address-line"><i data-lucide="mail"></i><span>bengaluru@xlawfirm.in</span></div>
+            </div>
+        </div>
+
+        <!-- Form side -->
+        <div class="contact-form-wrap reveal">
+            <h3>Request a Consultation</h3>
+            <p>All information is treated with strict confidentiality. We will respond within one business day.</p>
+
+            <form class="contact-form" id="contactForm" novalidate>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="firstName">First Name <span class="required">*</span></label>
+                        <input type="text" id="firstName" class="form-input" placeholder="Rahul" autocomplete="given-name" />
+                        <span class="form-error" id="err-firstName"><i data-lucide="alert-circle"></i> Required</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="lastName">Last Name <span class="required">*</span></label>
+                        <input type="text" id="lastName" class="form-input" placeholder="Sharma" autocomplete="family-name" />
+                        <span class="form-error" id="err-lastName"><i data-lucide="alert-circle"></i> Required</span>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address <span class="required">*</span></label>
+                        <input type="email" id="email" class="form-input" placeholder="rahul@company.in" autocomplete="email" />
+                        <span class="form-error" id="err-email"><i data-lucide="alert-circle"></i> Valid email required</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-input" placeholder="+91 98765 43210" autocomplete="tel" />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="company">Company / Organisation</label>
+                    <input type="text" id="company" class="form-input" placeholder="Your company name" autocomplete="organization" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="practiceArea">Practice Area <span class="required">*</span></label>
+                        <select id="practiceArea" class="form-select">
+                            <option value="" disabled selected>Select a practice area</option>
+                            <option value="corporate">Corporate Law</option>
+                            <option value="litigation">Litigation &amp; Dispute Resolution</option>
+                            <option value="regulatory">Regulatory &amp; Compliance</option>
+                            <option value="commercial">Commercial Transactions</option>
+                            <option value="other">Other / Not Sure</option>
+                        </select>
+                        <span class="form-error" id="err-practiceArea"><i data-lucide="alert-circle"></i> Please select</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="preferredOffice">Preferred Office</label>
+                        <select id="preferredOffice" class="form-select">
+                            <option value="" disabled selected>Select an office</option>
+                            <option value="delhi">New Delhi</option>
+                            <option value="mumbai">Mumbai</option>
+                            <option value="bengaluru">Bengaluru</option>
+                            <option value="any">No preference</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="message">Brief Description of Your Matter <span class="required">*</span></label>
+                    <textarea id="message" class="form-textarea" placeholder="Please describe the legal matter you need assistance with. This will help us assign the right attorney." rows="5"></textarea>
+                    <span class="form-error" id="err-message"><i data-lucide="alert-circle"></i> Please describe your matter</span>
+                </div>
+
+                <div class="form-checkbox-group">
+                    <input type="checkbox" id="privacyCheck" class="form-checkbox" />
+                    <label class="form-checkbox-label" for="privacyCheck">
+                        I acknowledge that the information provided will be kept strictly confidential
+                        and used solely for the purpose of this enquiry, in accordance with the firm's
+                        <a href="#">Privacy Policy</a>.
+                    </label>
+                </div>
+                <span class="form-error" id="err-privacy" style="margin-top:-8px;"><i data-lucide="alert-circle"></i> Please acknowledge before submitting</span>
+
+                <div class="form-submit-wrap">
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        Submit Enquiry
+                    </button>
+                    <span class="form-confidential">
+                        <i data-lucide="lock"></i>
+                        Strictly confidential
+                    </span>
+                </div>
+            </form>
+
+            <!-- Success state -->
+            <div class="form-success" id="formSuccess">
+                <div class="form-success-icon">
+                    <i data-lucide="check"></i>
+                </div>
+                <h4>Enquiry Received</h4>
+                <p>Thank you. One of our attorneys will be in touch within one business day to discuss your matter.</p>
+                <a href="index.html" class="btn btn-secondary" style="margin-top:0.5rem;">Return to Home</a>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- ══ FAQ ════════════════════════════════════════════════════ -->
+<section class="faq-section">
+    <div class="faq-bg" data-parallax data-parallax-speed="0.2">
+        <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="faq-inner">
+        <div class="section-header reveal">
+            <span class="section-label">Before You Reach Out</span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-list reveal">
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Is my initial consultation confidential?
+                    <span class="faq-icon"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Yes, absolutely. All communications with X Law Firm — including initial consultations —
+                        are protected by attorney-client privilege. We treat every enquiry with the
+                        strictest confidentiality, regardless of whether you proceed to engage us.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How quickly will I hear back after submitting an enquiry?
+                    <span class="faq-icon"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        We respond to all enquiries within one business day. Urgent matters
+                        — including time-sensitive transactions, enforcement actions, or injunctions
+                        — are escalated immediately. Please indicate urgency in your message.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    Do you work with individuals, or only companies?
+                    <span class="faq-icon"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        We advise businesses of all sizes, institutions, and individuals.
+                        Our practice spans corporate clients, financial institutions, startups,
+                        government-affiliated entities, and high-net-worth individuals across
+                        litigation, corporate, and regulatory matters.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    What should I prepare before the first meeting?
+                    <span class="faq-icon"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        A brief summary of the matter, relevant documents (contracts, correspondence,
+                        notices), and a clear statement of what outcome you are seeking. The more context
+                        you can provide, the more productive the first meeting will be. Our attorneys
+                        will send a preparation checklist once your consultation is confirmed.
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <button class="faq-question">
+                    How does the firm structure its fees?
+                    <span class="faq-icon"><i data-lucide="plus"></i></span>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-inner">
+                        Fee structures vary depending on the nature and complexity of the matter.
+                        We offer hourly rates, fixed-fee arrangements for defined-scope engagements,
+                        and retainer arrangements for ongoing advisory work. All fee structures are
+                        discussed and agreed transparently before engagement commences.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">X Law Firm</a>
+            <p>A full-service law firm providing strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="practice-areas.html#corporate-law">Corporate Law</a></li>
+                <li><a href="practice-areas.html#litigation">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="practice-areas.html#regulatory">Regulatory &amp; Compliance</a></li>
+                <li><a href="practice-areas.html#commercial">Commercial Transactions</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="about.html">About the Firm</a></li>
+                <li><a href="attorneys.html">Attorneys</a></li>
+                <li><a href="insights.html">Insights</a></li>
+                <li><a href="contact.html">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li><i data-lucide="map-pin"></i><span>New Delhi · Mumbai · Bengaluru</span></li>
+                <li><i data-lucide="phone"></i><span>+91 00000 00000</span></li>
+                <li><i data-lucide="mail"></i><span>contact@xlawfirm.in</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Disclaimer</a>
+            <a href="#">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
+<script>/* page logic handled by pages.js */
+</script>
+</body>
+</html>

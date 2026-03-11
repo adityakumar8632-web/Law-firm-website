@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>X Law Firm — Trusted Legal Counsel</title>
+<meta name="description" content="X Law Firm provides strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters." />
+
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<!-- Styles -->
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/interactions.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<style>
+/* ── INDEX-SPECIFIC ─────────────────────────────────── */
+.hero-title-line {
+    display: block;
+    overflow: hidden;
+}
+
+/* Decorative vertical rule on hero right side */
+.hero-deco {
+    position: absolute;
+    right: var(--inline-pad);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255,255,255,0.3);
+    font-size: 0.68rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+}
+
+.hero-deco::before {
+    content: '';
+    width: 1px;
+    height: 80px;
+    background: rgba(255,255,255,0.2);
+}
+
+@media (max-width: 768px) { .hero-deco { display: none; } }
+
+/* About section */
+.about { background: #fff; }
+
+/* Insights — alternating bg */
+.insights { background: var(--color-surface); }
+
+/* Scroll indicator */
+.scroll-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.4);
+    font-size: 0.7rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 40px;
+    background: rgba(255,255,255,0.2);
+    animation: scrollPulse 2s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1); }
+    50%       { opacity: 0.8; transform: scaleY(0.7); }
+}
+
+@media (max-width: 768px) { .scroll-hint { display: none; } }
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="index.html" class="logo">X Law Firm</a>
+
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+            <a href="attorneys.html" class="nav-link">Attorneys</a>
+            <a href="insights.html" class="nav-link">Insights</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+
+        <a href="contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+
+    <!-- Mobile drawer -->
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="attorneys.html" class="nav-link">Attorneys</a>
+        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ══ HERO ══════════════════════════════════════════════════ -->
+<section class="hero">
+    <div class="hero-bg" data-parallax data-parallax-speed="0.35">
+        <img
+            src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1800&auto=format&fit=crop&q=80"
+            alt="Law firm building exterior"
+            fetchpriority="high"
+        />
+    </div>
+
+    <div class="hero-deco">Established 1998</div>
+    <div class="scroll-hint">Scroll</div>
+
+    <div class="hero-content">
+        <span class="hero-eyebrow">Trusted Legal Counsel</span>
+
+        <h1 class="hero-title">
+            <span class="hero-title-line">Clarity, Precision</span>
+            <span class="hero-title-line">& Results.</span>
+        </h1>
+
+        <p class="hero-subtitle">
+            Strategic legal counsel for complex business matters — delivered
+            with discretion, depth, and a relentless focus on your objectives.
+        </p>
+
+        <div class="hero-actions">
+            <a href="contact.html" class="btn btn-white">Request Consultation</a>
+            <a href="practice-areas.html" class="btn btn-ghost">Explore Practice Areas</a>
+        </div>
+    </div>
+
+    <div class="hero-stats">
+        <div class="stat" data-count="26">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Years of Experience</span>
+        </div>
+        <div class="stat" data-count="12">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Practice Areas</span>
+        </div>
+        <div class="stat" data-count="43">
+            <span class="stat-number">0</span>
+            <span class="stat-label">Jurisdictions Served</span>
+        </div>
+        <div class="stat" data-count="98" data-suffix="%">
+            <span class="stat-number">0%</span>
+            <span class="stat-label">Compliance Success</span>
+        </div>
+    </div>
+</section>
+
+<!-- ══ ABOUT ══════════════════════════════════════════════════ -->
+<section class="about" id="about">
+    <div class="about-parallax-bg" data-parallax data-parallax-speed="0.25">
+        <img
+            src="https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1400&auto=format&fit=crop&q=80"
+            alt="Law library"
+        />
+    </div>
+
+    <div class="about-grid">
+        <div class="about-content">
+            <span class="section-label reveal">About the Firm</span>
+            <h2 class="section-title reveal">Built on Expertise.<br>Driven by Results.</h2>
+
+            <div class="reveal">
+                <p>
+                    X Law Firm is a full-service firm providing strategic legal counsel
+                    to businesses, institutions, and individuals across a wide range of
+                    practice areas. We combine deep legal expertise with a practical,
+                    results-driven approach to help our clients navigate complex legal
+                    challenges with confidence.
+                </p>
+                <p>
+                    Our firm is built on clarity, precision, and accountability. We believe
+                    effective legal advice goes beyond interpretation of the law — it
+                    requires understanding our clients' objectives, industries, and
+                    long-term goals.
+                </p>
+            </div>
+
+            <a href="about.html" class="btn btn-primary reveal" style="margin-top:2rem; width:fit-content;">Learn More About Us</a>
+        </div>
+
+        <div class="philosophy reveal">
+            <div class="philosophy-item">
+                <h3>Commitment to Excellence</h3>
+                <p>
+                    We maintain the highest professional standards while continuously
+                    adapting to legal, regulatory, and business developments.
+                </p>
+            </div>
+            <div class="philosophy-item">
+                <h3>Client-Focused Approach</h3>
+                <p>
+                    Every client engagement is handled with professionalism,
+                    confidentiality, and attention to detail — clear guidance at every step.
+                </p>
+            </div>
+            <div class="philosophy-item">
+                <h3>Experience & Expertise</h3>
+                <p>
+                    Our attorneys bring experience across multiple jurisdictions and
+                    industries, advising on matters that require discretion and sound judgment.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ PRACTICE AREAS ════════════════════════════════════════ -->
+<section class="practice-areas" id="practice">
+    <div class="practice-parallax-bg" data-parallax data-parallax-speed="0.3">
+        <img
+            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&auto=format&fit=crop&q=80"
+            alt="Modern boardroom"
+        />
+    </div>
+
+    <div class="practice-areas-inner">
+        <div class="section-header reveal">
+            <span class="section-label light">What We Do</span>
+            <h2 class="section-title light">Practice Areas</h2>
+            <p class="section-intro light">
+                Comprehensive legal expertise across the full spectrum of
+                corporate, commercial, and regulatory matters.
+            </p>
+        </div>
+
+        <div class="practice-grid stagger-children">
+            <article class="practice-card">
+                <div>
+                    <h3>Corporate Law</h3>
+                    <p>
+                        Advising businesses on governance, compliance, transactions,
+                        and complex commercial arrangements across jurisdictions.
+                    </p>
+                </div>
+                <div class="practice-card-action">
+                    <a href="practice/corporate-law.html" aria-label="Corporate Law detail">
+                        <i data-lucide="arrow-up-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="practice-card">
+                <div>
+                    <h3>Litigation &amp; Dispute Resolution</h3>
+                    <p>
+                        Representing clients in disputes with a focus on strategic,
+                        efficient, and commercially sound resolution.
+                    </p>
+                </div>
+                <div class="practice-card-action">
+                    <a href="practice/litigation.html" aria-label="Litigation detail">
+                        <i data-lucide="arrow-up-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="practice-card">
+                <div>
+                    <h3>Regulatory &amp; Compliance</h3>
+                    <p>
+                        Guiding clients through regulatory frameworks, compliance
+                        obligations, and risk management strategies.
+                    </p>
+                </div>
+                <div class="practice-card-action">
+                    <a href="practice/regulatory.html" aria-label="Regulatory detail">
+                        <i data-lucide="arrow-up-right"></i>
+                    </a>
+                </div>
+            </article>
+
+            <article class="practice-card">
+                <div>
+                    <h3>Commercial Transactions</h3>
+                    <p>
+                        Structuring and negotiating commercial agreements that support
+                        long-term business objectives and manage risk.
+                    </p>
+                </div>
+                <div class="practice-card-action">
+                    <a href="practice/commercial.html" aria-label="Commercial transactions detail">
+                        <i data-lucide="arrow-up-right"></i>
+                    </a>
+                </div>
+            </article>
+        </div>
+
+        <div class="reveal" style="margin-top:3rem; text-align:center;">
+            <a href="practice-areas.html" class="btn btn-ghost">View All Practice Areas</a>
+        </div>
+    </div>
+</section>
+
+<!-- ══ WHY FIRM ═══════════════════════════════════════════════ -->
+<section class="why-firm">
+    <div class="why-parallax-bg" data-parallax data-parallax-speed="0.25">
+        <img
+            src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1400&auto=format&fit=crop&q=80"
+            alt="Justice scales and cityscape"
+        />
+    </div>
+
+    <div style="position:relative;z-index:2;">
+        <div class="section-header reveal">
+            <span class="section-label">Why Choose Us</span>
+            <h2 class="section-title">The Standard We Hold<br>Ourselves To</h2>
+            <p class="section-intro">
+                We combine legal expertise with a disciplined, client-focused approach
+                to deliver practical, commercially sound solutions.
+            </p>
+        </div>
+
+        <div class="why-grid stagger-children">
+            <article class="why-card">
+                <div class="why-icon"><i data-lucide="scale"></i></div>
+                <h3>Proven Legal Expertise</h3>
+                <p>
+                    Our attorneys bring deep experience across key practice areas,
+                    offering informed legal guidance grounded in years of professional
+                    practice and industry knowledge.
+                </p>
+            </article>
+
+            <article class="why-card">
+                <div class="why-icon"><i data-lucide="users"></i></div>
+                <h3>Client-Focused Representation</h3>
+                <p>
+                    We prioritise clear communication and tailored legal strategies,
+                    ensuring every client receives attentive and responsive representation.
+                </p>
+            </article>
+
+            <article class="why-card">
+                <div class="why-icon"><i data-lucide="briefcase"></i></div>
+                <h3>Strategic Legal Insight</h3>
+                <p>
+                    Beyond legal analysis, we provide practical, business-minded advice
+                    designed to manage risk and support informed decision-making.
+                </p>
+            </article>
+
+            <article class="why-card">
+                <div class="why-icon"><i data-lucide="lock"></i></div>
+                <h3>Integrity &amp; Confidentiality</h3>
+                <p>
+                    We operate with the highest ethical standards, safeguarding client
+                    confidentiality and fostering relationships built on trust.
+                </p>
+            </article>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CASE EXPERIENCE ════════════════════════════════════════ -->
+<section class="case-experience">
+    <div class="case-parallax-bg" data-parallax data-parallax-speed="0.28">
+        <img
+            src="https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=1600&auto=format&fit=crop&q=80"
+            alt="Courtroom interior"
+        />
+    </div>
+
+    <div class="case-experience-inner">
+        <div class="case-header reveal">
+            <div>
+                <span class="section-label">Track Record</span>
+                <h2 class="section-title">Case Experience</h2>
+                <p class="section-intro">
+                    Selected matters reflecting our experience across complex legal
+                    and commercial challenges.
+                </p>
+            </div>
+            <div class="case-controls">
+                <button class="case-btn" data-dir="left" aria-label="Scroll left">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <button class="case-btn" data-dir="right" aria-label="Scroll right">
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="case-rail-wrapper">
+            <div class="case-rail">
+                <article class="case-card">
+                    <div class="case-image">
+                        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=800&auto=format&fit=crop&q=80" alt="Cross-border transaction">
+                    </div>
+                    <div class="case-overlay">
+                        <span class="case-meta">Corporate Law · Partner A</span>
+                        <h3>Cross-Border Acquisition Advisory</h3>
+                        <p>Strategic legal advisory for a multi-jurisdictional corporate restructuring valued at ₹850 Cr.</p>
+                        <div class="case-action">
+                            <a href="about.html#cases" aria-label="Read case">
+                                <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="case-card">
+                    <div class="case-image">
+                        <img src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=800&auto=format&fit=crop&q=80" alt="Commercial dispute">
+                    </div>
+                    <div class="case-overlay">
+                        <span class="case-meta">Litigation · Partner B</span>
+                        <h3>High-Value Commercial Dispute</h3>
+                        <p>Represented a corporate client in a complex commercial litigation matter across three forums.</p>
+                        <div class="case-action">
+                            <a href="about.html#cases" aria-label="Read case">
+                                <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="case-card">
+                    <div class="case-image">
+                        <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&auto=format&fit=crop&q=80" alt="Regulatory compliance">
+                    </div>
+                    <div class="case-overlay">
+                        <span class="case-meta">Regulatory · Partner C</span>
+                        <h3>Regulatory Compliance Advisory</h3>
+                        <p>Ongoing advisory on regulatory frameworks and compliance strategy for a listed financial institution.</p>
+                        <div class="case-action">
+                            <a href="about.html#cases" aria-label="Read case">
+                                <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="case-card">
+                    <div class="case-image">
+                        <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=800&auto=format&fit=crop&q=80" alt="Commercial transaction">
+                    </div>
+                    <div class="case-overlay">
+                        <span class="case-meta">Commercial · Partner A</span>
+                        <h3>Infrastructure Project Financing</h3>
+                        <p>Structured and negotiated complex project finance documentation for a ₹1,200 Cr infrastructure asset.</p>
+                        <div class="case-action">
+                            <a href="about.html#cases" aria-label="Read case">
+                                <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ INSIGHTS ═══════════════════════════════════════════════ -->
+<section class="insights">
+    <div class="insights-parallax-bg" data-parallax data-parallax-speed="0.25">
+        <img
+            src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1600&auto=format&fit=crop&q=80"
+            alt="Legal documents and newspapers"
+        />
+    </div>
+
+    <div class="insights-inner">
+        <div class="insights-header reveal">
+            <div>
+                <span class="section-label">Knowledge</span>
+                <h2 class="section-title">Insights &amp; Legal Updates</h2>
+                <p class="section-intro">
+                    Commentary and analysis on legal developments impacting
+                    businesses and institutions.
+                </p>
+            </div>
+            <div class="insights-controls">
+                <button class="insight-btn" data-dir="left" aria-label="Scroll left">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <button class="insight-btn" data-dir="right" aria-label="Scroll right">
+                    <i data-lucide="arrow-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="insights-rail-wrapper">
+            <div class="insights-rail">
+                <article class="insight-card">
+                    <div>
+                        <span class="insight-meta">Corporate Law · Jan 2026</span>
+                        <h3>Key Considerations in Cross-Border Transactions</h3>
+                        <p>An overview of regulatory and commercial factors businesses should consider when structuring cross-border deals.</p>
+                    </div>
+                    <div class="insight-action">
+                        <a href="articles/cross-border-transactions.html" aria-label="Read article">
+                            <i data-lucide="arrow-up-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="insight-card">
+                    <div>
+                        <span class="insight-meta">Litigation · Jan 2026</span>
+                        <h3>Managing Risk in High-Value Commercial Disputes</h3>
+                        <p>Practical guidance on mitigating exposure and navigating complex dispute resolution processes.</p>
+                    </div>
+                    <div class="insight-action">
+                        <a href="articles/commercial-disputes.html" aria-label="Read article">
+                            <i data-lucide="arrow-up-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="insight-card">
+                    <div>
+                        <span class="insight-meta">Regulatory · Dec 2025</span>
+                        <h3>Recent Developments in Regulatory Compliance</h3>
+                        <p>A summary of recent regulatory changes and their implications for businesses operating across jurisdictions.</p>
+                    </div>
+                    <div class="insight-action">
+                        <a href="articles/regulatory-developments.html" aria-label="Read article">
+                            <i data-lucide="arrow-up-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="insight-card">
+                    <div>
+                        <span class="insight-meta">Commercial · Nov 2025</span>
+                        <h3>Drafting for Resilience: Force Majeure Clauses Post-Pandemic</h3>
+                        <p>How commercial contracts are evolving to address unforeseen disruption and allocate risk effectively.</p>
+                    </div>
+                    <div class="insight-action">
+                        <a href="insights.html" aria-label="Read article">
+                            <i data-lucide="arrow-up-right"></i>
+                        </a>
+                    </div>
+                </article>
+
+                <article class="insight-card">
+                    <div>
+                        <span class="insight-meta">Corporate · Oct 2025</span>
+                        <h3>ESG Obligations for Listed Companies: What's Changing</h3>
+                        <p>An overview of new ESG disclosure and governance requirements affecting listed entities in India.</p>
+                    </div>
+                    <div class="insight-action">
+                        <a href="insights.html" aria-label="Read article">
+                            <i data-lucide="arrow-up-right"></i>
+                        </a>
+                    </div>
+                </article>
+            </div>
+        </div>
+
+        <div class="reveal" style="margin-top:3rem; text-align:center;">
+            <a href="insights.html" class="btn btn-primary">View All Insights</a>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════════════ -->
+<section class="cta">
+    <div class="cta-parallax-bg" data-parallax data-parallax-speed="0.3">
+        <img
+            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80"
+            alt="Dramatic architecture"
+        />
+    </div>
+
+    <div class="cta-inner">
+        <div class="cta-content reveal">
+            <h2>
+                Figure Out the Problem.<br>
+                Get It Resolved with Confidence.
+            </h2>
+            <p>
+                Speak with an experienced attorney to understand your legal position
+                and explore practical solutions tailored to your objectives.
+            </p>
+            <div class="cta-actions">
+                <a href="contact.html" class="btn btn-white">Request a Confidential Consultation</a>
+                <a href="attorneys.html" class="btn btn-ghost">Speak With an Attorney</a>
+            </div>
+        </div>
+
+        <div class="cta-assurance reveal">
+            <p>
+                All consultations are handled with strict confidentiality and
+                professional discretion. No obligation to engage.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">X Law Firm</a>
+            <p>
+                A full-service law firm providing strategic legal counsel
+                to businesses, institutions, and individuals across complex
+                legal and commercial matters.
+            </p>
+        </div>
+
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="practice/corporate-law.html">Corporate Law</a></li>
+                <li><a href="practice/litigation.html">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="practice/regulatory.html">Regulatory &amp; Compliance</a></li>
+                <li><a href="practice/commercial.html">Commercial Transactions</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="about.html">About the Firm</a></li>
+                <li><a href="attorneys.html">Attorneys</a></li>
+                <li><a href="insights.html">Insights</a></li>
+                <li><a href="contact.html">Careers</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li>
+                    <i data-lucide="map-pin"></i>
+                    <span>New Delhi · Mumbai · Bengaluru</span>
+                </li>
+                <li>
+                    <i data-lucide="phone"></i>
+                    <span>+91 00000 00000</span>
+                </li>
+                <li>
+                    <i data-lucide="mail"></i>
+                    <span>contact@xlawfirm.in</span>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="legal/privacy.html">Privacy Policy</a>
+            <a href="legal/disclaimer.html">Disclaimer</a>
+            <a href="legal/terms.html">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+</body>
+</html>

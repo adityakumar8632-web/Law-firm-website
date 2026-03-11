@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Attorneys — X Law Firm</title>
+<meta name="description" content="Meet the attorneys at X Law Firm. Experienced legal professionals advising on corporate, litigation, regulatory, and commercial matters." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/interactions.css">
+<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="css/responsive.css">
+
+<!-- page styles in pages.css + components.css -->
+<style>/* legacy overrides only */
+
+/* Attorney cards grid */
+.attorneys-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.attorneys-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+
+.attorneys-bg img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    opacity: 0.04;
+}
+
+.attorneys-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 2.5vw, 36px);
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+@media (max-width: 1024px) { .attorneys-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 580px)  { .attorneys-grid { grid-template-columns: 1fr; } }
+
+.attorney-card {
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    transition: border-color 260ms var(--ease-standard),
+                transform 260ms var(--ease-standard),
+                box-shadow 260ms var(--ease-standard);
+    cursor: pointer;
+}
+
+.attorney-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(27,42,74,0.12);
+}
+
+.attorney-photo {
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    background: var(--color-surface);
+    position: relative;
+}
+
+.attorney-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    filter: grayscale(20%);
+    transition: transform 400ms var(--ease-standard), filter 400ms;
+}
+
+.attorney-card:hover .attorney-photo img {
+    transform: scale(1.04);
+    filter: grayscale(0%);
+}
+
+.attorney-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+}
+
+.attorney-photo-placeholder span {
+    font-family: var(--font-heading);
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    opacity: 0.4;
+}
+
+.attorney-info {
+    padding: 24px 24px 20px;
+}
+
+.attorney-name {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-bottom: 0.2rem;
+}
+
+.attorney-title {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 0.75rem;
+}
+
+.attorney-specialties {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1rem;
+}
+
+.attorney-tag {
+    font-size: 0.72rem;
+    font-weight: 400;
+    color: var(--color-muted);
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    padding: 3px 8px;
+    background: var(--color-surface);
+}
+
+.attorney-bio-short {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+    margin-bottom: 1.25rem;
+}
+
+.attorney-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+}
+
+.attorney-contact-links {
+    display: flex;
+    gap: 12px;
+}
+
+.attorney-contact-links a {
+    width: 32px; height: 32px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-muted);
+    transition: border-color 200ms, color 200ms, background 200ms;
+}
+
+.attorney-contact-links a:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    background: rgba(27,42,74,0.04);
+}
+
+.attorney-contact-links svg { width: 14px; height: 14px; stroke-width: 1.5; }
+
+.attorney-view-link {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: gap 200ms;
+}
+
+.attorney-view-link:hover { gap: 8px; }
+.attorney-view-link svg { width: 14px; height: 14px; }
+
+/* Partners vs Associates filter */
+.attorneys-filter {
+    display: flex;
+    gap: 8px;
+    margin-bottom: clamp(32px, 5svh, 56px);
+    flex-wrap: wrap;
+}
+
+.filter-btn {
+    height: 38px;
+    padding-inline: 20px;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    background: transparent;
+    cursor: pointer;
+    transition: all 220ms var(--ease-standard);
+}
+
+.filter-btn.is-active, .filter-btn:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+/* Profile modal */
+.attorney-modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 800;
+    background: rgba(8,12,20,0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 280ms var(--ease-standard);
+    backdrop-filter: blur(4px);
+}
+
+.attorney-modal-overlay.is-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.attorney-modal {
+    background: #fff;
+    border-radius: 10px;
+    width: 100%;
+    max-width: 760px;
+    max-height: 90vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    transform: translateY(24px) scale(0.98);
+    transition: transform 300ms var(--ease-standard);
+    position: relative;
+}
+
+.attorney-modal-overlay.is-open .attorney-modal {
+    transform: translateY(0) scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px; right: 20px;
+    width: 38px; height: 38px;
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-muted);
+    background: #fff;
+    cursor: pointer;
+    z-index: 10;
+    transition: border-color 200ms, color 200ms;
+}
+
+.modal-close:hover { border-color: var(--color-text); color: var(--color-text); }
+.modal-close svg { width: 16px; height: 16px; }
+
+.modal-body {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 420px;
+}
+
+@media (max-width: 600px) {
+    .modal-body { grid-template-columns: 1fr; }
+    .modal-photo { aspect-ratio: 3/2; }
+}
+
+.modal-photo {
+    background: var(--color-surface);
+    overflow: hidden;
+}
+
+.modal-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+}
+
+.modal-photo-placeholder {
+    width: 100%;
+    height: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+}
+
+.modal-photo-placeholder span {
+    font-family: var(--font-heading);
+    font-size: 5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    opacity: 0.3;
+}
+
+.modal-content {
+    padding: 36px 32px;
+}
+
+.modal-name {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 0.3rem;
+}
+
+.modal-role {
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin-bottom: 1.25rem;
+}
+
+.modal-bio {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+}
+
+.modal-section-title {
+    font-family: var(--font-body);
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 0.6rem;
+}
+
+.modal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+}
+
+.modal-education {
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    line-height: 1.7;
+}
+
+.modal-contact-bar {
+    display: flex;
+    gap: 12px;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--color-border);
+}
+
+/* Values section */
+.values-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.values-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+
+.values-bg img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    opacity: 0.07;
+}
+
+.values-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(16px, 2vw, 28px);
+    margin-top: clamp(40px, 6svh, 64px);
+}
+
+@media (max-width: 900px) { .values-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .values-grid { grid-template-columns: 1fr; } }
+
+.value-card {
+    padding: 28px 24px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    background: rgba(255,255,255,0.04);
+    transition: background 240ms, border-color 240ms, transform 240ms;
+}
+
+.value-card:hover {
+    background: rgba(255,255,255,0.09);
+    border-color: rgba(255,255,255,0.22);
+    transform: translateY(-3px);
+}
+
+.value-number {
+    font-family: var(--font-heading);
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: rgba(255,255,255,0.15);
+    line-height: 1;
+    margin-bottom: 0.75rem;
+    display: block;
+}
+
+.value-card h3 {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.value-card p {
+    font-size: 0.85rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.65;
+}
+
+/* Join the firm section */
+.join-section {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.join-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    will-change: transform;
+}
+
+.join-bg img {
+    width: 100%;
+    height: 120%;
+    object-fit: cover;
+    opacity: 0.06;
+}
+
+.join-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+
+@media (max-width: 900px) { .join-inner { grid-template-columns: 1fr; } }
+
+.join-content h2 {
+    font-family: var(--font-heading);
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-weight: 600;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+}
+
+.join-content p {
+    color: var(--color-muted);
+    line-height: 1.75;
+    margin-bottom: 2rem;
+}
+
+.join-perks {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.join-perk {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+}
+
+.join-perk-icon {
+    width: 36px; height: 36px;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+}
+
+.join-perk-icon svg { width: 16px; height: 16px; color: var(--color-accent); stroke-width: 1.5; }
+
+.join-perk-text h4 {
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+}
+
+.join-perk-text p {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    margin: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="index.html" class="logo">X Law Firm</a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+            <a href="attorneys.html" class="nav-link active">Attorneys</a>
+            <a href="insights.html" class="nav-link">Insights</a>
+            <a href="about.html" class="nav-link">About</a>
+            <a href="contact.html" class="nav-link">Contact</a>
+        </nav>
+        <a href="contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="attorneys.html" class="nav-link">Attorneys</a>
+        <a href="insights.html" class="nav-link">Insights</a>
+        <a href="about.html" class="nav-link">About</a>
+        <a href="contact.html" class="nav-link">Contact</a>
+        <a href="contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ATTORNEY PROFILE MODAL -->
+<div class="attorney-modal-backdrop" id="attorneyModal" role="dialog" aria-modal="true" aria-label="Attorney profile">
+    <div class="attorney-modal" id="modalContent">
+        <button class="attorney-modal-close" id="modalClose" aria-label="Close">
+            <i data-lucide="x"></i>
+        </button>
+        <div class="attorney-modal-header">
+            <div class="attorney-modal-avatar" id="modalInitials">AB</div>
+            <div>
+                <div class="attorney-modal-name" id="modalName"></div>
+                <div class="attorney-modal-role" id="modalRole"></div>
+            </div>
+        </div>
+        <div class="attorney-modal-body">
+            <p class="attorney-modal-bio" id="modalBio"></p>
+            <div>
+                <div class="attorney-modal-section-label">Practice Areas</div>
+                <div class="attorney-modal-tags" id="modalTags"></div>
+            </div>
+            <div>
+                <div class="attorney-modal-section-label">Education</div>
+                <ul id="modalEducation" style="padding-left:1.2rem;color:var(--color-muted);font-size:var(--text-base);line-height:1.8;"></ul>
+            </div>
+            <div class="attorney-modal-footer">
+                <a href="contact.html" class="btn btn-primary btn-sm">Request a Meeting</a>
+                <a href="contact.html" class="btn btn-secondary btn-sm">Send an Email</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ══ PAGE HERO ══════════════════════════════════════════════ -->
+<section class="page-hero">
+    <div class="page-hero-bg" data-parallax data-parallax-speed="0.3">
+        <img
+            src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1800&auto=format&fit=crop&q=80"
+            alt="Law firm attorneys"
+            fetchpriority="high"
+        />
+    </div>
+    <div class="page-hero-content">
+        <div class="breadcrumb">
+            <a href="index.html">Home</a>
+            <span>/</span>
+            <span>Attorneys</span>
+        </div>
+        <h1 class="page-title">Our Attorneys</h1>
+        <p class="page-subtitle">
+            A team of experienced legal professionals committed to delivering
+            exceptional counsel with integrity, precision, and results.
+        </p>
+    </div>
+</section>
+
+<!-- ══ ATTORNEYS GRID ═════════════════════════════════════════ -->
+<section class="attorneys-section">
+    <div class="attorneys-bg" data-parallax data-parallax-speed="0.2">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+
+    <div style="position:relative;z-index:2;">
+        <div class="section-header reveal">
+            <span class="section-label">The Team</span>
+            <h2 class="section-title">Counsel You Can Count On</h2>
+            <p class="section-intro">
+                Our attorneys bring depth of experience, cross-jurisdictional expertise,
+                and a commitment to each client's objectives.
+            </p>
+        </div>
+
+        <!-- Filter -->
+        <div class="attorneys-filter reveal" style="margin-top:2.5rem;">
+            <button class="filter-btn is-active" data-filter="all">All Attorneys</button>
+            <button class="filter-btn" data-filter="partner">Partners</button>
+            <button class="filter-btn" data-filter="associate">Associates</button>
+            <button class="filter-btn" data-filter="corporate">Corporate</button>
+            <button class="filter-btn" data-filter="litigation">Litigation</button>
+            <button class="filter-btn" data-filter="regulatory">Regulatory</button>
+        </div>
+
+        <div class="attorneys-grid stagger-children" id="attorneysGrid">
+
+            <!-- Partner 1 -->
+            <div class="attorney-card"
+                data-category="partner corporate"
+                data-name="Arjun Mehta"
+                data-role="Senior Partner"
+                data-bio="Arjun Mehta leads the firm's corporate practice with over 22 years of experience advising on mergers and acquisitions, cross-border transactions, and private equity matters. He has represented some of India's leading conglomerates and multinational corporations in high-value deals across sectors including infrastructure, financial services, and technology."
+                data-tags="Corporate Law,M&A,Private Equity,Cross-Border Transactions"
+                data-education="B.A. LL.B. (Hons.), NLSIU Bengaluru | LL.M., Harvard Law School"
+                data-initials="AM">
+                <div class="attorney-photo">
+                    <div class="attorney-photo-placeholder"><span>AM</span></div>
+                </div>
+                <div class="attorney-info">
+                    <div class="attorney-name">Arjun Mehta</div>
+                    <div class="attorney-title">Senior Partner</div>
+                    <div class="attorney-specialties">
+                        <span class="attorney-tag">Corporate Law</span>
+                        <span class="attorney-tag">M&amp;A</span>
+                        <span class="attorney-tag">Private Equity</span>
+                    </div>
+                    <p class="attorney-bio-short">
+                        22+ years advising on M&A, cross-border transactions, and private equity across India and Southeast Asia.
+                    </p>
+                    <div class="attorney-card-footer">
+                        <div class="attorney-contact-links">
+                            <a href="contact.html" aria-label="Email Arjun Mehta"><i data-lucide="mail"></i></a>
+                            <a href="contact.html" aria-label="Phone"><i data-lucide="phone"></i></a>
+                        </div>
+                        <span class="attorney-view-link">View Profile <i data-lucide="arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partner 2 -->
+            <div class="attorney-card"
+                data-category="partner litigation"
+                data-name="Priya Sharma"
+                data-role="Partner — Litigation"
+                data-bio="Priya Sharma is one of the firm's most accomplished litigators, with 18 years of experience in commercial litigation, arbitration, and regulatory enforcement proceedings. She has appeared before the Supreme Court, High Courts, and international arbitration forums including SIAC and ICC, representing clients in matters involving billions of rupees in dispute."
+                data-tags="Litigation,Arbitration,Regulatory Enforcement,Dispute Resolution"
+                data-education="B.A. LL.B. (Hons.), NLU Delhi | Diploma in International Arbitration, CIArb London"
+                data-initials="PS">
+                <div class="attorney-photo">
+                    <div class="attorney-photo-placeholder"><span>PS</span></div>
+                </div>
+                <div class="attorney-info">
+                    <div class="attorney-name">Priya Sharma</div>
+                    <div class="attorney-title">Partner — Litigation</div>
+                    <div class="attorney-specialties">
+                        <span class="attorney-tag">Litigation</span>
+                        <span class="attorney-tag">Arbitration</span>
+                        <span class="attorney-tag">SIAC / ICC</span>
+                    </div>
+                    <p class="attorney-bio-short">
+                        18 years of complex commercial litigation experience before Supreme Court, High Courts, and international arbitration forums.
+                    </p>
+                    <div class="attorney-card-footer">
+                        <div class="attorney-contact-links">
+                            <a href="contact.html" aria-label="Email Priya Sharma"><i data-lucide="mail"></i></a>
+                            <a href="contact.html" aria-label="Phone"><i data-lucide="phone"></i></a>
+                        </div>
+                        <span class="attorney-view-link">View Profile <i data-lucide="arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partner 3 -->
+            <div class="attorney-card"
+                data-category="partner regulatory"
+                data-name="Vikram Nair"
+                data-role="Partner — Regulatory"
+                data-bio="Vikram Nair heads the firm's regulatory and compliance practice. With 16 years of experience, he advises clients across financial services, infrastructure, and healthcare on regulatory licensing, compliance frameworks, and government investigations. He previously served as in-house counsel at a major financial institution before joining the firm."
+                data-tags="Regulatory,Compliance,SEBI,RBI,Government Investigations"
+                data-education="B.A. LL.B., Symbiosis Law School | MBA (Finance), IIM Ahmedabad"
+                data-initials="VN">
+                <div class="attorney-photo">
+                    <div class="attorney-photo-placeholder"><span>VN</span></div>
+                </div>
+                <div class="attorney-info">
+                    <div class="attorney-name">Vikram Nair</div>
+                    <div class="attorney-title">Partner — Regulatory</div>
+                    <div class="attorney-specialties">
+                        <span class="attorney-tag">Regulatory</span>
+                        <span class="attorney-tag">SEBI / RBI</span>
+                        <span class="attorney-tag">Compliance</span>
+                    </div>
+                    <p class="attorney-bio-short">
+                        16 years advising on regulatory licensing, compliance strategy, and government investigations across regulated industries.
+                    </p>
+                    <div class="attorney-card-footer">
+                        <div class="attorney-contact-links">
+                            <a href="contact.html" aria-label="Email Vikram Nair"><i data-lucide="mail"></i></a>
+                            <a href="contact.html" aria-label="Phone"><i data-lucide="phone"></i></a>
+                        </div>
+                        <span class="attorney-view-link">View Profile <i data-lucide="arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Associate 1 -->
+            <div class="attorney-card"
+                data-category="associate corporate"
+                data-name="Ananya Kulkarni"
+                data-role="Senior Associate — Corporate"
+                data-bio="Ananya Kulkarni is a senior associate in the firm's corporate practice, focusing on M&A transactions, joint ventures, and corporate restructuring. She advises domestic and international clients on deal structuring, due diligence, and transaction documentation, with particular expertise in technology and startup transactions."
+                data-tags="Corporate Law,M&A,Due Diligence,Startups"
+                data-education="B.A. LL.B. (Hons.), GNLU Gandhinagar | LL.M., UCL London"
+                data-initials="AK">
+                <div class="attorney-photo">
+                    <div class="attorney-photo-placeholder"><span>AK</span></div>
+                </div>
+                <div class="attorney-info">
+                    <div class="attorney-name">Ananya Kulkarni</div>
+                    <div class="attorney-title">Senior Associate — Corporate</div>
+                    <div class="attorney-specialties">
+                        <span class="attorney-tag">Corporate Law</span>
+                        <span class="attorney-tag">Startups</span>
+                        <span class="attorney-tag">Due Diligence</span>
+                    </div>
+                    <p class="attorney-bio-short">
+                        Specialist in technology sector M&A and venture capital transactions, with experience in both Indian and UK legal frameworks.
+                    </p>
+                    <div class="attorney-card-footer">
+                        <div class="attorney-contact-links">
+                            <a href="contact.html" aria-label="Email Ananya Kulkarni"><i data-lucide="mail"></i></a>
+                            <a href="contact.html" aria-label="Phone"><i data-lucide="phone"></i></a>
+                        </div>
+                        <span class="attorney-view-link">View Profile <i data-lucide="arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Associate 2 -->
+            <div class="attorney-card"
+                data-category="associate litigation"
+                data-name="Rohan Desai"
+                data-role="Associate — Litigation"
+                data-bio="Rohan Desai is an associate in the litigation practice with a focus on commercial disputes and arbitration. He assists partners in managing complex multi-party disputes and has experience drafting pleadings, conducting legal research, and appearing in chambers before courts in Delhi and Mumbai."
+                data-tags="Litigation,Commercial Disputes,Arbitration,Court Appearances"
+                data-education="B.A. LL.B. (Hons.), NALSAR Hyderabad"
+                data-initials="RD">
+                <div class="attorney-photo">
+                    <div class="attorney-photo-placeholder"><span>RD</span></div>
+                </div>
+                <div class="attorney-info">
+                    <div class="attorney-name">Rohan Desai</div>
+                    <div class="attorney-title">Associate — Litigation</div>
+                    <div class="attorney-specialties">
+                        <span class="attorney-tag">Litigation</span>
+                        <span class="attorney-tag">Arbitration</span>
+                        <span class="attorney-tag">Commercial Disputes</span>
+                    </div>
+                    <p class="attorney-bio-short">
+                        Experienced in complex multi-party commercial disputes with appearances in Delhi and Mumbai courts and arbitral proceedings.
+                    </p>
+                    <div class="attorney-card-footer">
+                        <div class="attorney-contact-links">
+                            <a href="contact.html" aria-label="Email Rohan Desai"><i data-lucide="mail"></i></a>
+                            <a href="contact.html" aria-label="Phone"><i data-lucide="phone"></i></a>
+                        </div>
+                        <span class="attorney-view-link">View Profile <i data-lucide="arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Associate 3 -->
+            <div class="attorney-card"
+                data-category="associate regulatory corporate"
+                data-name="Meera Iyer"
+                data-role="Associate — Regulatory &amp; Corporate"
+                data-bio="Meera Iyer advises clients on compliance programme design, data privacy matters under the DPDP Act, and competition law filings. She has a strong background in technology law and assists both the corporate and regulatory teams on cross-disciplinary matters involving digital businesses and fintech companies."
+                data-tags="Regulatory,Data Privacy,Competition Law,DPDP,Fintech"
+                data-education="B.B.A. LL.B. (Hons.), SLS Pune | PG Diploma in Data Protection Law"
+                data-initials="MI">
+                <div class="attorney-photo">
+                    <div class="attorney-photo-placeholder"><span>MI</span></div>
+                </div>
+                <div class="attorney-info">
+                    <div class="attorney-name">Meera Iyer</div>
+                    <div class="attorney-title">Associate — Regulatory &amp; Corporate</div>
+                    <div class="attorney-specialties">
+                        <span class="attorney-tag">Data Privacy</span>
+                        <span class="attorney-tag">Competition Law</span>
+                        <span class="attorney-tag">Fintech</span>
+                    </div>
+                    <p class="attorney-bio-short">
+                        Specialises in data privacy, DPDP compliance, and competition law with a focus on technology and fintech businesses.
+                    </p>
+                    <div class="attorney-card-footer">
+                        <div class="attorney-contact-links">
+                            <a href="contact.html" aria-label="Email Meera Iyer"><i data-lucide="mail"></i></a>
+                            <a href="contact.html" aria-label="Phone"><i data-lucide="phone"></i></a>
+                        </div>
+                        <span class="attorney-view-link">View Profile <i data-lucide="arrow-right"></i></span>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /attorneys-grid -->
+    </div>
+</section>
+
+<!-- ══ FIRM VALUES ════════════════════════════════════════════ -->
+<section class="values-section">
+    <div class="values-bg" data-parallax data-parallax-speed="0.28">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="values-inner">
+        <div class="section-header reveal">
+            <span class="section-label light">What We Stand For</span>
+            <h2 class="section-title light">Our Professional Values</h2>
+            <p class="section-intro light">
+                Every attorney at X Law Firm is guided by a set of principles that
+                define how we work with clients and each other.
+            </p>
+        </div>
+        <div class="values-grid stagger-children">
+            <div class="value-card">
+                <span class="value-number">01</span>
+                <h3>Integrity</h3>
+                <p>We uphold the highest ethical standards in every engagement, with no exceptions.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-number">02</span>
+                <h3>Precision</h3>
+                <p>Legal work demands accuracy. We sweat the details so our clients don't have to.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-number">03</span>
+                <h3>Discretion</h3>
+                <p>Client confidentiality is inviolable. We protect information as a matter of professional duty.</p>
+            </div>
+            <div class="value-card">
+                <span class="value-number">04</span>
+                <h3>Results</h3>
+                <p>We measure ourselves by outcomes, not effort. Our clients' goals are our success criteria.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ JOIN THE FIRM ══════════════════════════════════════════ -->
+<section class="join-section">
+    <div class="join-bg" data-parallax data-parallax-speed="0.22">
+        <img src="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=1400&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="join-inner">
+        <div class="join-content reveal">
+            <span class="section-label">Careers</span>
+            <h2>Join X Law Firm</h2>
+            <p>
+                We are always looking for exceptional legal minds who share our commitment
+                to quality, integrity, and delivering outstanding results for clients.
+                We offer a challenging, collegial environment with meaningful responsibility
+                from day one.
+            </p>
+            <a href="contact.html" class="btn btn-primary">Explore Career Opportunities</a>
+        </div>
+        <div class="join-perks stagger-children reveal">
+            <div class="join-perk">
+                <div class="join-perk-icon"><i data-lucide="award"></i></div>
+                <div class="join-perk-text">
+                    <h4>Quality Work</h4>
+                    <p>Work on complex, high-value matters from early in your career.</p>
+                </div>
+            </div>
+            <div class="join-perk">
+                <div class="join-perk-icon"><i data-lucide="trending-up"></i></div>
+                <div class="join-perk-text">
+                    <h4>Clear Growth Path</h4>
+                    <p>Transparent progression criteria with mentorship at every level.</p>
+                </div>
+            </div>
+            <div class="join-perk">
+                <div class="join-perk-icon"><i data-lucide="globe"></i></div>
+                <div class="join-perk-text">
+                    <h4>Multi-Jurisdictional Exposure</h4>
+                    <p>Work on matters spanning India, the UK, Singapore, and beyond.</p>
+                </div>
+            </div>
+            <div class="join-perk">
+                <div class="join-perk-icon"><i data-lucide="heart"></i></div>
+                <div class="join-perk-text">
+                    <h4>Supportive Culture</h4>
+                    <p>A collegial environment where collaboration is encouraged.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══ CTA ════════════════════════════════════════════════════ -->
+<section class="cta">
+    <div class="cta-parallax-bg" data-parallax data-parallax-speed="0.3">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="cta-inner">
+        <div class="cta-content reveal">
+            <h2>Ready to Speak<br>With an Attorney?</h2>
+            <p>
+                Contact us to schedule a confidential consultation with the
+                attorney best suited to your matter.
+            </p>
+            <div class="cta-actions">
+                <a href="contact.html" class="btn btn-white">Request a Consultation</a>
+                <a href="practice-areas.html" class="btn btn-ghost">Explore Practice Areas</a>
+            </div>
+        </div>
+        <div class="cta-assurance reveal">
+            <p>All consultations are handled with strict confidentiality and professional discretion.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ══ FOOTER ═════════════════════════════════════════════════ -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="index.html" class="footer-logo">X Law Firm</a>
+            <p>A full-service law firm providing strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="practice/corporate-law.html">Corporate Law</a></li>
+                <li><a href="practice/litigation.html">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="practice/regulatory.html">Regulatory &amp; Compliance</a></li>
+                <li><a href="practice/commercial.html">Commercial Transactions</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="about.html">About the Firm</a></li>
+                <li><a href="attorneys.html">Attorneys</a></li>
+                <li><a href="insights.html">Insights</a></li>
+                <li><a href="contact.html">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li><i data-lucide="map-pin"></i><span>New Delhi · Mumbai · Bengaluru</span></li>
+                <li><i data-lucide="phone"></i><span>+91 00000 00000</span></li>
+                <li><i data-lucide="mail"></i><span>contact@xlawfirm.in</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="legal/privacy.html">Privacy Policy</a>
+            <a href="legal/disclaimer.html">Disclaimer</a>
+            <a href="legal/terms.html">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
+<script>/* attorneys page — all logic handled by pages.js */
+</script>
+</body>
+</html>
