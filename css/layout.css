@@ -1,0 +1,952 @@
+/* ============================================================
+   LAYOUT.CSS
+   Structural layout — header, hero, every section, footer.
+   No colours, no component styles here — structure only.
+   X Law Firm — Production v1.0
+   ============================================================ */
+
+
+/* ── PAGE TRANSITION LOADER ─────────────────────────────────
+   Fixed overlay with conveyor belt animation.
+   Controlled via JS (transitions.js).
+   ─────────────────────────────────────────────────────────── */
+#page-loader {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-loader);
+    background: var(--color-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 80ms ease;
+}
+
+#page-loader.is-active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.loader-conveyor {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.loader-box {
+    width: 12px;
+    height: 12px;
+    border-radius: var(--radius-sm);
+    background: var(--color-accent);
+    opacity: 0.15;
+}
+
+/* Staggered keyframe per box */
+.loader-box.b1 { animation: conveyorMove 1.6s ease-in-out infinite 0s; }
+.loader-box.b2 { animation: conveyorMove 1.6s ease-in-out infinite 0.16s; }
+.loader-box.b3 { animation: conveyorMove 1.6s ease-in-out infinite 0.32s; }
+.loader-box.b4 { animation: conveyorMove 1.6s ease-in-out infinite 0.48s; }
+.loader-box.b5 { animation: conveyorMove 1.6s ease-in-out infinite 0.64s; }
+
+@keyframes conveyorMove {
+    0%   { opacity: 0.15; transform: translateX(0)    scale(1);   }
+    18%  { opacity: 1;    transform: translateX(0)    scale(1.12); }
+    78%  { opacity: 1;    transform: translateX(20px) scale(1);   }
+    79%  { opacity: 0;    transform: translateX(20px) scale(1);   }
+    80%  { opacity: 0;    transform: translateX(-80px) scale(1);  }
+    100% { opacity: 0.15; transform: translateX(0)    scale(1);   }
+}
+
+
+/* ── READING PROGRESS BAR ───────────────────────────────────
+   Thin accent line fixed at very top. Article page only.
+   ─────────────────────────────────────────────────────────── */
+.reading-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 3px;
+    background: var(--color-accent);
+    z-index: var(--z-loader);
+    width: 0%;
+    transition: width 80ms linear;
+    pointer-events: none;
+}
+
+
+/* ── SITE HEADER ────────────────────────────────────────────
+   Fixed header that shrinks on scroll (via .scrolled class).
+   ─────────────────────────────────────────────────────────── */
+.site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: var(--z-header);
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.6rem var(--inline-pad);
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid transparent;
+    transition:
+        padding        var(--duration-slow) var(--ease-standard),
+        background     var(--duration-slow) var(--ease-standard),
+        border-color   var(--duration-slow) var(--ease-standard),
+        box-shadow     var(--duration-slow) var(--ease-standard);
+}
+
+/* Scrolled state — injected by animation.js */
+.site-header.scrolled .header-inner {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    background: rgba(255, 255, 255, 0.94);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Primary nav — flex row of links */
+.primary-nav {
+    display: flex;
+    align-items: center;
+    gap: clamp(18px, 2.5vw, 40px);
+}
+
+/* Mobile drawer — hidden on desktop */
+.mobile-nav {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    z-index: calc(var(--z-header) - 10);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border);
+    padding: 5.5rem var(--inline-pad) 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    visibility: hidden;              /* GSAP controls this */
+    box-shadow: var(--shadow-lg);
+}
+
+/* Backdrop */
+.nav-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-header) - 20);
+    background: rgba(0, 0, 0, 0.4);
+    display: none;                   /* GSAP controls this */
+}
+
+/* Mobile hamburger — hidden on desktop */
+.mobile-menu-btn {
+    display: none;
+    width: 44px; height: 44px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--color-text);
+    transition:
+        border-color var(--duration-base),
+        background   var(--duration-base);
+    flex-shrink: 0;
+}
+
+.mobile-menu-btn svg {
+    width: 20px; height: 20px;
+    pointer-events: none;
+}
+
+
+/* ── PARALLAX WRAPPER PATTERN ───────────────────────────────
+   Each section with a parallax BG uses this structure:
+   .section > .section-parallax-bg (abs) + .section-inner (rel z-index 2)
+   The parallax element's `will-change: transform` is set here.
+   ─────────────────────────────────────────────────────────── */
+[data-parallax] {
+    will-change: transform;
+}
+
+/* All parallax BG wrappers share the same stacking pattern */
+.hero-bg,
+.about-parallax-bg,
+.practice-parallax-bg,
+.why-parallax-bg,
+.case-parallax-bg,
+.insights-parallax-bg,
+.cta-parallax-bg,
+.page-hero-bg,
+.pd-overview-bg,
+.pd-services-bg,
+.pd-matters-bg,
+.pd-attorneys-bg,
+.featured-bg,
+.articles-bg,
+.newsletter-bg,
+.story-bg,
+.timeline-bg,
+.mission-bg,
+.offices-bg,
+.contact-bg,
+.faq-bg,
+.related-bg,
+.values-bg,
+.join-bg,
+.attorneys-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+/* All parallax BG images fill their container and overshoot height for movement */
+.hero-bg img,
+.about-parallax-bg img,
+.practice-parallax-bg img,
+.why-parallax-bg img,
+.case-parallax-bg img,
+.insights-parallax-bg img,
+.cta-parallax-bg img,
+.page-hero-bg img,
+.pd-overview-bg img,
+.pd-services-bg img,
+.pd-matters-bg img,
+.pd-attorneys-bg img,
+.featured-bg img,
+.articles-bg img,
+.newsletter-bg img,
+.story-bg img,
+.timeline-bg img,
+.mission-bg img,
+.offices-bg img,
+.contact-bg img,
+.faq-bg img,
+.related-bg img,
+.values-bg img,
+.join-bg img,
+.attorneys-bg img {
+    width: 100%;
+    height: 120%;          /* extra height for scroll movement */
+    object-fit: cover;
+    object-position: center;
+}
+
+
+/* ── HERO (INDEX) ───────────────────────────────────────────
+   Full-viewport hero with parallax bg and bottom-anchored content.
+   ─────────────────────────────────────────────────────────── */
+.hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: var(--section-pad) var(--inline-pad);
+    overflow: hidden;
+}
+
+/* Dark gradient overlay */
+.hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(8,12,20,0.85) 0%,
+        rgba(8,12,20,0.45) 50%,
+        rgba(8,12,20,0.18) 100%
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 68ch;
+}
+
+/* Stats bar along the bottom */
+.hero-stats {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    margin-top: clamp(32px, 6svh, 64px);
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+/* Decorative vertical deco — right side of hero */
+.hero-deco {
+    position: absolute;
+    right: var(--inline-pad);
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    color: rgba(255, 255, 255, 0.28);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    writing-mode: vertical-rl;
+}
+
+.hero-deco::before {
+    content: '';
+    width: 1px;
+    height: 72px;
+    background: rgba(255, 255, 255, 0.18);
+}
+
+/* Scroll hint */
+.scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: var(--text-xs);
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    pointer-events: none;
+}
+
+.scroll-hint::after {
+    content: '';
+    width: 1px;
+    height: 44px;
+    background: rgba(255, 255, 255, 0.22);
+    animation: scrollPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1);   }
+    50%       { opacity: 0.8; transform: scaleY(0.65); }
+}
+
+
+/* ── PAGE HERO (inner pages) ────────────────────────────────
+   Shorter hero for all non-homepage pages.
+   ─────────────────────────────────────────────────────────── */
+.page-hero {
+    position: relative;
+    min-height: 52svh;
+    display: flex;
+    align-items: flex-end;
+    padding: var(--section-pad) var(--inline-pad);
+    padding-top: calc(var(--section-pad) + 80px); /* clear fixed header */
+    overflow: hidden;
+}
+
+.page-hero-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(8,12,20,0.90) 0%,
+        rgba(8,12,20,0.52) 55%,
+        rgba(8,12,20,0.22) 100%
+    );
+}
+
+.page-hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 72ch;
+}
+
+
+/* ── SHARED SECTION STRUCTURE ───────────────────────────────
+   Sections use position: relative + overflow: hidden
+   so parallax BGs stay clipped.
+   ─────────────────────────────────────────────────────────── */
+.about,
+.practice-areas,
+.why-firm,
+.case-experience,
+.insights,
+.cta,
+.pa-intro,
+.pa-detail-section,
+.pa-overview-section,
+.pd-overview,
+.pd-services,
+.pd-matters,
+.pd-attorneys,
+.featured-section,
+.articles-section,
+.newsletter-section,
+.story-section,
+.timeline-section,
+.mission-section,
+.offices-section,
+.contact-section,
+.faq-section,
+.related-section,
+.attorneys-section,
+.values-section,
+.join-section {
+    position: relative;
+    overflow: hidden;
+}
+
+/* All sections have consistent vertical padding */
+.about,
+.practice-areas,
+.why-firm,
+.case-experience,
+.insights,
+.cta,
+.pa-overview-section,
+.pd-services,
+.pd-matters,
+.pd-attorneys,
+.featured-section,
+.newsletter-section,
+.story-section,
+.timeline-section,
+.mission-section,
+.offices-section,
+.faq-section,
+.related-section,
+.attorneys-section,
+.values-section,
+.join-section {
+    padding: var(--section-pad) var(--inline-pad);
+}
+
+/* Reduced top padding for sections that follow a hero */
+.pa-intro,
+.articles-section,
+.contact-section {
+    padding: clamp(60px, 8svh, 100px) var(--inline-pad);
+}
+
+/* Tighter for article body */
+.article-section {
+    padding: clamp(56px, 8svh, 96px) var(--inline-pad);
+}
+
+/* Background colour assignments */
+.about,
+.pd-overview,
+.pd-attorneys,
+.story-section,
+.offices-section,
+.contact-section,
+.featured-section,
+.article-section   { background: var(--color-bg); }
+
+.why-firm,
+.case-experience,
+.pa-detail-section:nth-child(odd),
+.timeline-section,
+.join-section,
+.articles-section,
+.faq-section,
+.related-section   { background: var(--color-surface); }
+
+.pa-detail-section:nth-child(even) { background: var(--color-bg); }
+
+.practice-areas,
+.pa-overview-section,
+.pd-matters,
+.mission-section,
+.newsletter-section,
+.values-section,
+.cta               { background: var(--color-accent); }
+
+.insights,
+.pd-services       { background: var(--color-surface); }
+
+
+/* ── ABOUT ──────────────────────────────────────────────────  */
+.about-parallax-bg img,
+.story-bg img { opacity: 0.06; }
+
+.about-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+
+/* ── PRACTICE AREAS (homepage) ──────────────────────────────  */
+.practice-parallax-bg img { opacity: 0.08; }
+
+.practice-areas-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.practice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(14px, 2vw, 28px);
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+
+/* ── WHY FIRM ───────────────────────────────────────────────  */
+.why-parallax-bg img { opacity: 0.05; }
+
+.why-firm > div { position: relative; z-index: 2; }
+
+.why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(14px, 2vw, 28px);
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+
+/* ── CASE EXPERIENCE ────────────────────────────────────────  */
+.case-parallax-bg img { opacity: 0.04; }
+
+.case-experience-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.case-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: clamp(20px, 3vw, 40px);
+}
+
+.case-rail-wrapper {
+    overflow: hidden;
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+.case-rail {
+    display: flex;
+    gap: clamp(16px, 2vw, 28px);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+    cursor: grab;
+    /* Momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch;
+}
+
+.case-rail:active { cursor: grabbing; }
+.case-rail::-webkit-scrollbar { display: none; }
+
+
+/* ── INSIGHTS ───────────────────────────────────────────────  */
+.insights-parallax-bg img { opacity: 0.05; }
+
+.insights-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.insights-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: clamp(20px, 3vw, 40px);
+}
+
+.insights-rail-wrapper {
+    overflow: hidden;
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+.insights-rail {
+    display: flex;
+    gap: clamp(16px, 2vw, 24px);
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding-bottom: 10px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    cursor: grab;
+}
+
+.insights-rail:active { cursor: grabbing; }
+.insights-rail::-webkit-scrollbar { display: none; }
+
+
+/* ── CTA ────────────────────────────────────────────────────  */
+.cta-parallax-bg img { opacity: 0.12; }
+
+.cta-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+
+
+/* ── GLOBAL FOOTER ──────────────────────────────────────────  */
+.global-footer {
+    background: var(--color-black);
+    color: rgba(255, 255, 255, 0.75);
+    padding: clamp(60px, 8svh, 100px) var(--inline-pad) clamp(24px, 4svh, 48px);
+}
+
+.footer-main {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+    gap: clamp(32px, 4vw, 64px);
+    margin-bottom: clamp(40px, 6svh, 72px);
+    padding-bottom: clamp(40px, 6svh, 72px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+/* ── SECTION SHARED HELPERS ─────────────────────────────────  */
+.section-header {
+    max-width: var(--content-width);
+}
+
+/* Eyebrow label — used throughout */
+.section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-body);
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+}
+
+.section-label::before {
+    content: '';
+    display: block;
+    width: 28px;
+    height: 1px;
+    background: currentColor;
+    flex-shrink: 0;
+}
+
+/* Light variant for dark sections */
+.section-label.light {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* Breadcrumb */
+.breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: var(--text-sm);
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.breadcrumb a {
+    color: rgba(255, 255, 255, 0.62);
+    transition: color var(--duration-base);
+}
+
+.breadcrumb a:hover { color: #fff; }
+
+.breadcrumb span { color: rgba(255, 255, 255, 0.32); }
+
+
+/* ── ARTICLE PAGE LAYOUT ────────────────────────────────────  */
+.article-layout {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: clamp(40px, 5vw, 80px);
+    align-items: start;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.article-sidebar {
+    position: sticky;
+    top: 100px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.article-hero-image {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    aspect-ratio: 16/7;
+}
+
+.article-hero-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+/* ── CONTACT PAGE ───────────────────────────────────────────  */
+.contact-bg img { opacity: 0.04; }
+
+.contact-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+
+/* ── ABOUT PAGE SPECIFIC ────────────────────────────────────  */
+.about-grid,
+.story-grid {
+    position: relative;
+    z-index: 2;
+}
+
+.story-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+
+.story-stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    margin-top: var(--space-10);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+}
+
+/* Timeline */
+.timeline {
+    position: relative;
+    margin-top: clamp(40px, 6svh, 72px);
+    max-width: 840px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 100px;
+    top: 0; bottom: 0;
+    width: 1px;
+    background: var(--color-border);
+}
+
+.timeline-item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: var(--space-8);
+    margin-bottom: var(--space-12);
+    position: relative;
+}
+
+.timeline-inner { position: relative; z-index: 2; }
+
+/* Mission grid */
+.mission-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+/* Offices */
+.offices-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 3vw, 40px);
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+/* Join section */
+.join-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+
+
+/* ── INSIGHTS PAGE ──────────────────────────────────────────  */
+.featured-bg img,
+.articles-bg img { opacity: 0.04; }
+
+.featured-inner,
+.articles-inner  { position: relative; z-index: 2; }
+
+.featured-grid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: clamp(36px, 5vw, 80px);
+    align-items: center;
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+.newsletter-inner {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(36px, 6vw, 80px);
+    align-items: center;
+}
+
+.articles-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+}
+
+
+/* ── ATTORNEYS PAGE ─────────────────────────────────────────  */
+.attorneys-bg img { opacity: 0.04; }
+
+.attorneys-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(20px, 2.5vw, 36px);
+    margin-top: clamp(40px, 6svh, 72px);
+}
+
+.values-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: clamp(16px, 2vw, 28px);
+    margin-top: clamp(40px, 6svh, 64px);
+}
+
+
+/* ── PRACTICE AREAS PAGE ────────────────────────────────────  */
+.pa-intro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+.pa-detail-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: center;
+}
+
+/* Alternate detail sections flip the grid direction */
+.pa-detail-section:nth-child(even) .pa-detail-grid {
+    direction: rtl;
+}
+
+.pa-detail-section:nth-child(even) .pa-detail-content,
+.pa-detail-section:nth-child(even) .pa-detail-visual {
+    direction: ltr;
+}
+
+.expertise-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(12px, 2vw, 20px);
+    margin-top: clamp(40px, 6svh, 64px);
+}
+
+.pa-overview-inner { position: relative; z-index: 2; }
+
+
+/* ── PRACTICE DETAIL PAGE ───────────────────────────────────  */
+.pd-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 24px);
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+.pd-overview-grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+.pd-matters-inner,
+.pd-services-inner,
+.pd-attorneys-inner { position: relative; z-index: 2; }
+
+.pd-matters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: clamp(36px, 5svh, 60px);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pd-matter-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: var(--space-8);
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.pd-attorneys-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+
+/* ── RELATED ARTICLES ───────────────────────────────────────  */
+.related-inner { position: relative; z-index: 2; }
+
+.related-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+    margin-top: clamp(36px, 5svh, 60px);
+}

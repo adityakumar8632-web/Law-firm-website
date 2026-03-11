@@ -1,0 +1,645 @@
+/* ============================================================
+   INTERACTIONS.CSS
+   Hover states · Micro-interactions · GSAP companions
+   Transitions · Animations · Focus states · Cursors
+   X Law Firm — Production v1.0
+   ============================================================ */
+
+
+/* ══════════════════════════════════════════════════════════
+   1. GSAP ANIMATION — INITIAL HIDDEN STATES
+   These are the "from" states. GSAP animates to visible.
+   Do not remove — the page will flash content without them.
+   ══════════════════════════════════════════════════════════ */
+
+/* Hero entrance elements — start invisible */
+.hero-eyebrow,
+.hero-subtitle,
+.hero-actions,
+.hero-stats,
+.hero-deco,
+.scroll-hint { opacity: 0; }
+
+/* Hero title lines — each line clips from below */
+.hero-title .line {
+    display: block;
+    overflow: hidden;
+}
+
+.hero-title .line-inner {
+    display: block;
+    transform: translateY(100%);
+}
+
+/* Stat counters — start at zero opacity */
+[data-stat] { opacity: 0; }
+
+/* Scroll reveal defaults — GSAP animates from these */
+.reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    will-change: opacity, transform;
+}
+
+.stagger-children > * {
+    opacity: 0;
+    transform: translateY(24px);
+    will-change: opacity, transform;
+}
+
+/* Once animated, remove will-change to free GPU */
+.reveal.is-animated,
+.stagger-children.is-animated > * {
+    will-change: auto;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   2. HEADER INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+/* Scrolled state — added by animation.js at scroll > 80px */
+.site-header.scrolled .header-inner {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    background: rgba(255, 255, 255, 0.96);
+    border-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(20px) brightness(1.02);
+    -webkit-backdrop-filter: blur(20px) brightness(1.02);
+}
+
+/* Logo hover */
+.logo {
+    transition: color var(--duration-base) var(--ease-standard);
+}
+.logo:hover { color: var(--color-accent); }
+
+/* Nav link underline draw */
+.nav-link::after {
+    transition: width var(--duration-base) var(--ease-out);
+}
+.nav-link:hover::after,
+.nav-link.active::after { width: 100%; }
+
+/* Mobile nav link indent on hover */
+.mobile-nav .nav-link {
+    transition:
+        color        var(--duration-base) var(--ease-standard),
+        padding-left var(--duration-base) var(--ease-standard),
+        border-color var(--duration-base);
+}
+.mobile-nav .nav-link:hover { padding-left: 6px; }
+
+/* Mobile menu button */
+.mobile-menu-btn {
+    transition:
+        background    var(--duration-base),
+        border-color  var(--duration-base),
+        color         var(--duration-base);
+}
+.mobile-menu-btn:hover {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+/* Body scroll lock when modal or mobile nav is open */
+body.modal-open   { overflow: hidden; }
+body.nav-open     { overflow: hidden; }
+
+
+/* ══════════════════════════════════════════════════════════
+   3. BUTTON INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+/* Arrow icon nudge inside buttons on hover */
+.btn:hover svg[data-lucide="arrow-right"],
+.btn:hover svg[data-lucide="chevron-right"] {
+    transform: translateX(3px);
+}
+
+.btn svg {
+    transition: transform var(--duration-base) var(--ease-standard);
+}
+
+/* Active press down */
+.btn:active { transform: translateY(1px); }
+
+/* Loading state */
+.btn.is-loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.btn.is-loading::after {
+    content: '';
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: btnSpin 0.7s linear infinite;
+    margin-left: 6px;
+}
+
+@keyframes btnSpin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   4. HERO INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+/* Scroll hint pulse */
+.scroll-hint::after {
+    animation: scrollPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(1);    }
+    50%       { opacity: 0.8; transform: scaleY(0.65); }
+}
+
+/* Fade out scroll hint once user scrolls */
+.hero.has-scrolled .scroll-hint {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 600ms var(--ease-standard);
+}
+
+/* Hero parallax BG — subtle zoom on load */
+.hero-bg img {
+    animation: heroBgDrift 18s ease-in-out infinite alternate;
+}
+
+@keyframes heroBgDrift {
+    from { transform: scale(1)    translateY(0); }
+    to   { transform: scale(1.04) translateY(-12px); }
+}
+
+/* Stop drift when GSAP parallax takes over */
+.hero-bg[data-parallax] img { animation: none; }
+
+
+/* ══════════════════════════════════════════════════════════
+   5. CARD HOVER INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+/* Consistent lift + shadow across all card types */
+.attorney-card,
+.insight-card,
+.article-card,
+.why-card,
+.office-card,
+.pd-service-item,
+.pd-attorney-card,
+.related-card,
+.expertise-card,
+.firm-value-card {
+    transition:
+        border-color var(--duration-base) var(--ease-standard),
+        transform    var(--duration-base) var(--ease-standard),
+        box-shadow   var(--duration-base) var(--ease-standard);
+}
+
+.attorney-card:hover,
+.insight-card:hover,
+.article-card:hover,
+.why-card:hover,
+.office-card:hover,
+.pd-service-item:hover,
+.pd-attorney-card:hover,
+.related-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 14px 36px rgba(27, 42, 74, 0.1);
+}
+
+/* Practice cards (on dark bg) — deeper shadow */
+.practice-card {
+    transition:
+        border-left-color var(--duration-base) var(--ease-standard),
+        background        var(--duration-base) var(--ease-standard),
+        transform         var(--duration-base) var(--ease-standard),
+        box-shadow        var(--duration-base) var(--ease-standard);
+}
+
+.practice-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+/* Case cards — scale instead of lift */
+.case-card {
+    transition:
+        transform var(--duration-slow) var(--ease-standard),
+        box-shadow var(--duration-slow) var(--ease-standard);
+}
+
+.case-card:hover { transform: scale(1.02); }
+
+/* Image zoom inside cards */
+.attorney-photo img,
+.insight-card-image img,
+.article-card-image img,
+.office-image img,
+.case-card-img,
+.featured-visual img,
+.pa-detail-visual img,
+.pd-overview-visual img,
+.related-card-img img {
+    transition:
+        transform    var(--duration-slow) var(--ease-standard),
+        filter       var(--duration-slow) var(--ease-standard);
+}
+
+/* Greyscale lift on card image hover */
+.insight-card:hover .insight-card-image img,
+.article-card:hover .article-card-image img,
+.related-card:hover .related-card-img img {
+    filter: grayscale(0%) !important;
+}
+
+/* Philosophy item underline draw */
+.philosophy-item::after {
+    transition: width var(--duration-slow) var(--ease-out);
+}
+.philosophy-item:hover::after { width: 100%; }
+
+/* Philosophy / service icon fill */
+.philosophy-icon,
+.pd-service-icon,
+.why-card-icon,
+.contact-icon {
+    transition:
+        background    var(--duration-base) var(--ease-standard),
+        border-color  var(--duration-base) var(--ease-standard);
+}
+
+.philosophy-icon svg,
+.pd-service-icon svg,
+.why-card-icon svg {
+    transition: color var(--duration-base) var(--ease-standard);
+}
+
+/* Specialty tags inside attorney cards */
+.specialty-tag {
+    transition:
+        background    var(--duration-fast) var(--ease-standard),
+        border-color  var(--duration-fast) var(--ease-standard),
+        color         var(--duration-fast) var(--ease-standard);
+}
+
+/* Read more link arrow nudge */
+.article-read-link,
+.insight-read-link,
+.practice-card-link,
+.attorney-card-link,
+.pd-attorney-card > a {
+    transition: color var(--duration-base), gap var(--duration-base);
+}
+
+.article-read-link svg,
+.insight-read-link svg,
+.practice-card-link svg,
+.attorney-card-link svg {
+    transition: transform var(--duration-base) var(--ease-standard);
+}
+
+.article-read-link:hover svg,
+.insight-read-link:hover svg,
+.practice-card-link:hover svg,
+.attorney-card-link:hover svg {
+    transform: translateX(3px);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   6. DRAG RAIL INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+.case-rail,
+.insights-rail {
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    transition: cursor 0ms;
+}
+
+.case-rail.is-dragging,
+.insights-rail.is-dragging {
+    cursor: grabbing;
+}
+
+/* Prevent image drag during scroll */
+.case-rail img,
+.insights-rail img {
+    pointer-events: none;
+    -webkit-user-drag: none;
+}
+
+/* Rail nav arrows */
+.rail-nav-btn {
+    transition:
+        background    var(--duration-base) var(--ease-standard),
+        border-color  var(--duration-base) var(--ease-standard),
+        color         var(--duration-base) var(--ease-standard),
+        transform     var(--duration-fast) var(--ease-standard);
+}
+
+.rail-nav-btn:active { transform: scale(0.9); }
+
+
+/* ══════════════════════════════════════════════════════════
+   7. ATTORNEY MODAL INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+.attorney-modal-backdrop {
+    transition: opacity var(--duration-base) var(--ease-standard);
+}
+
+.attorney-modal {
+    transform: scale(0.96) translateY(12px);
+    opacity: 0;
+    transition:
+        transform var(--duration-base) var(--ease-spring),
+        opacity   var(--duration-base) var(--ease-standard);
+}
+
+.attorney-modal-backdrop.is-open .attorney-modal {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+}
+
+.attorney-modal-close {
+    transition:
+        background   var(--duration-base),
+        border-color var(--duration-base),
+        color        var(--duration-base),
+        transform    var(--duration-fast);
+}
+
+.attorney-modal-close:hover  { transform: rotate(90deg); }
+.attorney-modal-close:active { transform: rotate(90deg) scale(0.9); }
+
+
+/* ══════════════════════════════════════════════════════════
+   8. FILTER BUTTONS
+   ══════════════════════════════════════════════════════════ */
+
+.filter-btn,
+.filter-tab,
+.office-tab {
+    transition:
+        background    var(--duration-fast) var(--ease-standard),
+        border-color  var(--duration-fast) var(--ease-standard),
+        color         var(--duration-fast) var(--ease-standard),
+        transform     var(--duration-fast) var(--ease-standard);
+}
+
+.filter-btn:active,
+.filter-tab:active,
+.office-tab:active { transform: scale(0.95); }
+
+
+/* ══════════════════════════════════════════════════════════
+   9. FORM INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+.form-input,
+.form-select,
+.form-textarea,
+.newsletter-input {
+    transition:
+        border-color var(--duration-base) var(--ease-standard),
+        box-shadow   var(--duration-base) var(--ease-standard),
+        background   var(--duration-base) var(--ease-standard);
+}
+
+/* Error shake animation */
+@keyframes inputShake {
+    0%, 100% { transform: translateX(0); }
+    20%       { transform: translateX(-6px); }
+    40%       { transform: translateX(6px); }
+    60%       { transform: translateX(-4px); }
+    80%       { transform: translateX(4px); }
+}
+
+.form-input.has-error,
+.form-select.has-error,
+.form-textarea.has-error {
+    animation: inputShake 0.4s var(--ease-standard);
+}
+
+/* Form success icon spin in */
+@keyframes successPop {
+    0%   { transform: scale(0) rotate(-45deg); opacity: 0; }
+    60%  { transform: scale(1.15) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.form-success-icon { animation: successPop 0.5s var(--ease-spring) forwards; }
+
+/* Checkbox custom style */
+.form-checkbox {
+    transition: transform var(--duration-fast);
+}
+.form-checkbox:checked { transform: scale(1.1); }
+
+
+/* ══════════════════════════════════════════════════════════
+   10. FAQ ACCORDION INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+.faq-question {
+    transition: color var(--duration-base) var(--ease-standard);
+}
+
+.faq-icon {
+    transition:
+        background    var(--duration-base) var(--ease-standard),
+        border-color  var(--duration-base) var(--ease-standard);
+}
+
+.faq-icon svg {
+    transition: transform var(--duration-slow) var(--ease-standard);
+}
+
+.faq-item.is-open .faq-icon svg {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    transition: max-height 380ms var(--ease-out);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   11. FOOTER INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+.footer-column ul li a {
+    transition: color var(--duration-base) var(--ease-standard);
+    display: inline-flex;
+    align-items: center;
+    gap: 0;
+}
+
+.footer-column ul li a:hover {
+    color: #fff;
+    gap: 4px;
+}
+
+.footer-column ul li a::after {
+    content: '→';
+    opacity: 0;
+    font-size: 0.7em;
+    transform: translateX(-4px);
+    transition:
+        opacity    var(--duration-base) var(--ease-standard),
+        transform  var(--duration-base) var(--ease-standard);
+}
+
+.footer-column ul li a:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.footer-legal a {
+    transition: color var(--duration-base) var(--ease-standard);
+}
+
+.footer-logo {
+    transition:
+        color    var(--duration-base) var(--ease-standard),
+        opacity  var(--duration-base);
+}
+.footer-logo:hover { opacity: 0.75; }
+
+
+/* ══════════════════════════════════════════════════════════
+   12. TOC & ARTICLE INTERACTIONS
+   ══════════════════════════════════════════════════════════ */
+
+.toc-link {
+    transition:
+        color        var(--duration-base) var(--ease-standard),
+        padding-left var(--duration-base) var(--ease-standard);
+}
+
+.toc-link:hover,
+.toc-link.is-active { padding-left: 4px; }
+
+.share-btn {
+    transition:
+        border-color var(--duration-base) var(--ease-standard),
+        color        var(--duration-base) var(--ease-standard),
+        background   var(--duration-base) var(--ease-standard),
+        transform    var(--duration-fast);
+}
+
+.share-btn:active { transform: scale(0.9); }
+
+
+/* ══════════════════════════════════════════════════════════
+   13. BREADCRUMB & PAGE HERO
+   ══════════════════════════════════════════════════════════ */
+
+.breadcrumb a {
+    transition: color var(--duration-base) var(--ease-standard);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   14. OFFICE PANEL TRANSITIONS
+   ══════════════════════════════════════════════════════════ */
+
+.office-panel {
+    transition: opacity var(--duration-base) var(--ease-standard);
+}
+
+.office-panel:not(.is-active) {
+    opacity: 0;
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+}
+
+.office-panel.is-active {
+    opacity: 1;
+    height: auto;
+    overflow: visible;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   15. READING PROGRESS BAR
+   ══════════════════════════════════════════════════════════ */
+
+.reading-progress {
+    transition: width 80ms linear;
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   16. FOCUS VISIBLE STATES — ACCESSIBILITY
+   ══════════════════════════════════════════════════════════ */
+
+.btn:focus-visible,
+.nav-link:focus-visible,
+.filter-btn:focus-visible,
+.filter-tab:focus-visible,
+.office-tab:focus-visible,
+.faq-question:focus-visible,
+.form-input:focus-visible,
+.form-select:focus-visible,
+.form-textarea:focus-visible,
+.attorney-card:focus-visible,
+.article-card:focus-visible,
+.toc-link:focus-visible,
+.share-btn:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
+/* Remove default outline — we're using focus-visible above */
+*:focus:not(:focus-visible) { outline: none; }
+
+
+/* ══════════════════════════════════════════════════════════
+   17. REDUCED MOTION — ACCESSIBILITY
+   Respects OS-level "reduce motion" preference.
+   ══════════════════════════════════════════════════════════ */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .hero-bg img { animation: none; }
+    .scroll-hint::after { animation: none; }
+    .loader-box { animation: none; }
+
+    .reveal,
+    .stagger-children > * {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+
+    .hero-eyebrow,
+    .hero-subtitle,
+    .hero-actions,
+    .hero-stats,
+    .hero-deco,
+    .scroll-hint,
+    [data-stat] {
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
