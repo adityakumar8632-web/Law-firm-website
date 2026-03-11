@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Practice Area — X Law Firm</title>
+<meta name="description" content="" id="metaDescription" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<link rel="stylesheet" href="../css/base.css">
+<link rel="stylesheet" href="../css/layout.css">
+<link rel="stylesheet" href="../css/components.css">
+<link rel="stylesheet" href="../css/interactions.css">
+<link rel="stylesheet" href="../css/pages.css">
+<link rel="stylesheet" href="../css/responsive.css">
+
+<style>
+/* ── PRACTICE DETAIL PAGE ────────────────────────────── */
+
+/* Overview */
+.pd-overview {
+    padding: var(--section-pad) var(--inline-pad);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.pd-overview-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.pd-overview-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.04;
+}
+
+.pd-overview-grid {
+    position: relative; z-index: 2;
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: clamp(40px, 6vw, 96px);
+    align-items: start;
+}
+
+@media (max-width: 900px) { .pd-overview-grid { grid-template-columns: 1fr; } }
+
+.pd-overview-content p {
+    color: var(--color-muted);
+    line-height: 1.8;
+    margin-bottom: 1.25rem;
+    font-size: 0.96rem;
+}
+
+.pd-overview-visual {
+    border-radius: 8px;
+    overflow: hidden;
+    aspect-ratio: 4/3;
+    position: sticky;
+    top: 100px;
+}
+
+.pd-overview-visual img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--ease-standard);
+}
+
+.pd-overview-visual:hover img { transform: scale(1.03); }
+
+/* Services list */
+.pd-services {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+.pd-services-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.pd-services-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.04;
+}
+
+.pd-services-inner {
+    position: relative; z-index: 2;
+}
+
+.pd-services-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(14px, 2vw, 24px);
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+@media (max-width: 640px) { .pd-services-grid { grid-template-columns: 1fr; } }
+
+.pd-service-item {
+    padding: 28px 26px;
+    background: #fff;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: border-color 240ms, transform 240ms, box-shadow 240ms;
+}
+
+.pd-service-item:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(27,42,74,0.08);
+}
+
+.pd-service-icon {
+    width: 38px; height: 38px;
+    flex-shrink: 0;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-surface);
+    transition: background 240ms, border-color 240ms;
+}
+
+.pd-service-item:hover .pd-service-icon {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+}
+
+.pd-service-icon svg {
+    width: 16px; height: 16px;
+    stroke-width: 1.5;
+    color: var(--color-accent);
+    transition: color 240ms;
+}
+
+.pd-service-item:hover .pd-service-icon svg { color: #fff; }
+
+.pd-service-text h4 {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+}
+
+.pd-service-text p {
+    font-size: 0.85rem;
+    color: var(--color-muted);
+    line-height: 1.65;
+}
+
+/* Key matters */
+.pd-matters {
+    padding: var(--section-pad) var(--inline-pad);
+    background: var(--color-accent);
+    position: relative;
+    overflow: hidden;
+}
+
+.pd-matters-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.pd-matters-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.08;
+}
+
+.pd-matters-inner {
+    position: relative; z-index: 2;
+}
+
+.pd-matters-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: clamp(36px, 5svh, 60px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.pd-matter-item {
+    display: grid;
+    grid-template-columns: 1fr 2fr auto;
+    gap: 2rem;
+    align-items: center;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    transition: background 220ms;
+    cursor: default;
+}
+
+@media (max-width: 720px) {
+    .pd-matter-item { grid-template-columns: 1fr; gap: 0.5rem; }
+}
+
+.pd-matter-category {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+}
+
+.pd-matter-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: #fff;
+}
+
+.pd-matter-outcome {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    text-align: right;
+    white-space: nowrap;
+}
+
+@media (max-width: 720px) { .pd-matter-outcome { text-align: left; } }
+
+/* Lead attorneys */
+.pd-attorneys {
+    padding: var(--section-pad) var(--inline-pad);
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+}
+
+.pd-attorneys-bg {
+    position: absolute; inset: 0; z-index: 0;
+    will-change: transform;
+}
+
+.pd-attorneys-bg img {
+    width: 100%; height: 120%;
+    object-fit: cover; opacity: 0.04;
+}
+
+.pd-attorneys-inner {
+    position: relative; z-index: 2;
+}
+
+.pd-attorneys-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(16px, 2.5vw, 28px);
+    margin-top: clamp(36px, 5svh, 60px);
+}
+
+@media (max-width: 900px) { .pd-attorneys-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .pd-attorneys-grid { grid-template-columns: 1fr; } }
+
+.pd-attorney-card {
+    padding: 28px 24px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    transition: border-color 240ms, transform 240ms, box-shadow 240ms;
+}
+
+.pd-attorney-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 28px rgba(27,42,74,0.08);
+}
+
+.pd-attorney-avatar {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--color-accent);
+    border: 2px solid var(--color-border);
+}
+
+.pd-attorney-name {
+    font-family: var(--font-heading);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.pd-attorney-role {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+}
+
+.pd-attorney-card a {
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: auto;
+    transition: color 200ms, gap 200ms;
+}
+
+.pd-attorney-card a:hover { color: var(--color-accent); gap: 8px; }
+.pd-attorney-card a svg { width: 13px; height: 13px; }
+
+/* Not found */
+.not-found {
+    min-height: 60svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: var(--section-pad) var(--inline-pad);
+    gap: 1rem;
+}
+
+.not-found h2 {
+    font-family: var(--font-heading);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--color-accent);
+}
+
+.not-found p { color: var(--color-muted); max-width: 40ch; }
+</style>
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div id="page-loader">
+    <div class="loader-conveyor">
+        <div class="loader-box b1"></div>
+        <div class="loader-box b2"></div>
+        <div class="loader-box b3"></div>
+        <div class="loader-box b4"></div>
+        <div class="loader-box b5"></div>
+    </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header" id="siteHeader">
+    <div class="header-inner">
+        <a href="../index.html" class="logo">X Law Firm</a>
+        <nav class="primary-nav" aria-label="Primary navigation">
+            <a href="../practice-areas.html" class="nav-link active">Practice Areas</a>
+            <a href="../attorneys.html" class="nav-link">Attorneys</a>
+            <a href="../insights.html" class="nav-link">Insights</a>
+            <a href="../about.html" class="nav-link">About</a>
+            <a href="../contact.html" class="nav-link">Contact</a>
+        </nav>
+        <a href="../contact.html" class="btn btn-primary header-cta">Request Consultation</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
+            <i data-lucide="menu"></i>
+        </button>
+    </div>
+    <nav class="mobile-nav" id="mobileNav" aria-label="Mobile navigation">
+        <a href="../practice-areas.html" class="nav-link">Practice Areas</a>
+        <a href="../attorneys.html" class="nav-link">Attorneys</a>
+        <a href="../insights.html" class="nav-link">Insights</a>
+        <a href="../about.html" class="nav-link">About</a>
+        <a href="../contact.html" class="nav-link">Contact</a>
+        <a href="../contact.html" class="btn btn-primary mobile-nav-cta">Request Consultation</a>
+    </nav>
+</header>
+<div id="navBackdrop" class="nav-backdrop"></div>
+
+<!-- ══ DYNAMIC CONTENT MOUNT POINTS ══════════════════════════ -->
+
+<!-- Hero -->
+<section class="page-hero" id="practiceHero">
+    <div class="page-hero-bg" id="heroBg" data-parallax data-parallax-speed="0.3">
+        <img id="heroImg" src="" alt="" fetchpriority="high" />
+    </div>
+    <div class="page-hero-content">
+        <div class="breadcrumb">
+            <a href="../index.html">Home</a>
+            <span>/</span>
+            <a href="../practice-areas.html">Practice Areas</a>
+            <span>/</span>
+            <span id="heroBreadcrumb"></span>
+        </div>
+        <div id="heroEyebrow" class="section-label light" style="margin-bottom:1rem;"></div>
+        <h1 class="page-title" id="heroTitle"></h1>
+        <p class="page-subtitle" id="heroSubtitle"></p>
+    </div>
+</section>
+
+<!-- Overview -->
+<section class="pd-overview">
+    <div class="pd-overview-bg" data-parallax data-parallax-speed="0.22">
+        <img id="overviewBgImg" src="" alt="" />
+    </div>
+    <div class="pd-overview-grid">
+        <div class="pd-overview-content reveal">
+            <span class="section-label" id="overviewLabel"></span>
+            <h2 class="section-title" id="overviewTitle" style="margin-bottom:1.5rem;"></h2>
+            <div id="overviewBody"></div>
+            <a href="../contact.html" class="btn btn-primary" style="margin-top:2rem; display:inline-flex;">Request a Consultation</a>
+        </div>
+        <div class="pd-overview-visual reveal">
+            <img id="overviewImg" src="" alt="" />
+        </div>
+    </div>
+</section>
+
+<!-- Services -->
+<section class="pd-services">
+    <div class="pd-services-bg" data-parallax data-parallax-speed="0.2">
+        <img id="servicesBgImg" src="" alt="" />
+    </div>
+    <div class="pd-services-inner">
+        <div class="section-header reveal">
+            <span class="section-label">What We Cover</span>
+            <h2 class="section-title" id="servicesTitle"></h2>
+            <p class="section-intro" id="servicesIntro"></p>
+        </div>
+        <div class="pd-services-grid stagger-children" id="servicesGrid"></div>
+    </div>
+</section>
+
+<!-- Key Matters -->
+<section class="pd-matters">
+    <div class="pd-matters-bg" data-parallax data-parallax-speed="0.28">
+        <img id="mattersBgImg" src="" alt="" />
+    </div>
+    <div class="pd-matters-inner">
+        <div class="section-header reveal">
+            <span class="section-label light">Track Record</span>
+            <h2 class="section-title light" id="mattersTitle"></h2>
+            <p class="section-intro light" id="mattersIntro"></p>
+        </div>
+        <div class="pd-matters-list reveal" id="mattersList"></div>
+    </div>
+</section>
+
+<!-- Lead Attorneys -->
+<section class="pd-attorneys">
+    <div class="pd-attorneys-bg" data-parallax data-parallax-speed="0.2">
+        <img id="attorneysBgImg" src="" alt="" />
+    </div>
+    <div class="pd-attorneys-inner">
+        <div class="section-header reveal">
+            <span class="section-label">The Team</span>
+            <h2 class="section-title" id="attorneysTitle"></h2>
+        </div>
+        <div class="pd-attorneys-grid stagger-children" id="attorneysGrid"></div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+    <div class="cta-parallax-bg" data-parallax data-parallax-speed="0.3">
+        <img src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80" alt="">
+    </div>
+    <div class="cta-inner">
+        <div class="cta-content reveal" id="ctaContent"></div>
+        <div class="cta-assurance reveal">
+            <p>All consultations are handled with strict confidentiality and professional discretion.</p>
+        </div>
+    </div>
+</section>
+
+<!-- Not Found (hidden by default) -->
+<div class="not-found" id="notFound" style="display:none;">
+    <h2>Practice Area Not Found</h2>
+    <p>The practice area you're looking for doesn't exist or the URL is incorrect.</p>
+    <a href="../practice-areas.html" class="btn btn-primary" style="margin-top:1rem;">View All Practice Areas</a>
+</div>
+
+<!-- Footer -->
+<footer class="global-footer">
+    <div class="footer-main">
+        <div class="footer-brand">
+            <a href="../index.html" class="footer-logo">X Law Firm</a>
+            <p>A full-service law firm providing strategic legal counsel to businesses, institutions, and individuals across complex legal and commercial matters.</p>
+        </div>
+        <div class="footer-column">
+            <h4>Practice Areas</h4>
+            <ul>
+                <li><a href="corporate-law.html">Corporate Law</a></li>
+                <li><a href="litigation.html">Litigation &amp; Dispute Resolution</a></li>
+                <li><a href="regulatory.html">Regulatory &amp; Compliance</a></li>
+                <li><a href="commercial.html">Commercial Transactions</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Firm</h4>
+            <ul>
+                <li><a href="../about.html">About the Firm</a></li>
+                <li><a href="../attorneys.html">Attorneys</a></li>
+                <li><a href="../insights.html">Insights</a></li>
+                <li><a href="../contact.html">Careers</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Contact</h4>
+            <ul class="footer-contact">
+                <li><i data-lucide="map-pin"></i><span>New Delhi · Mumbai · Bengaluru</span></li>
+                <li><i data-lucide="phone"></i><span>+91 00000 00000</span></li>
+                <li><i data-lucide="mail"></i><span>contact@xlawfirm.in</span></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 X Law Firm. All rights reserved.</p>
+        <div class="footer-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Disclaimer</a>
+            <a href="#">Terms of Use</a>
+        </div>
+    </div>
+</footer>
+
+<!-- ══ DATA + RENDERER ════════════════════════════════════════ -->
+<script>
+/* ============================================================
+   PRACTICE AREA DATA
+   To add a new practice area: add a new key to PRACTICES.
+   All links pointing to practice/[id].html will auto-resolve.
+   ============================================================ */
+
+const PRACTICES = {
+
+  'corporate-law': {
+    title:       'Corporate Law',
+    eyebrow:     'Practice Area',
+    subtitle:    'Advising boards, management teams, and investors on governance, transactions, and complex commercial arrangements across India and internationally.',
+    heroImg:     'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1800&auto=format&fit=crop&q=80',
+    overviewImg: 'https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=900&auto=format&fit=crop&q=80',
+    bgImg:       'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1400&auto=format&fit=crop&q=80',
+    overviewLabel: 'Corporate Practice',
+    overviewTitle: 'Full-Spectrum Corporate Advisory',
+    overviewBody: [
+      'Our corporate practice combines deep legal expertise with a nuanced understanding of business dynamics. We advise clients at every stage of their corporate lifecycle — from incorporation and governance structuring through to complex cross-border transactions, joint ventures, and strategic exits.',
+      'We work with listed companies, private equity funds, family-owned businesses, multinational corporations, and startups. Our approach is commercially grounded: we structure transactions that are legally sound, commercially practical, and built to withstand scrutiny.'
+    ],
+    servicesTitle: 'Corporate Law Services',
+    servicesIntro: 'Our corporate team advises on the full range of transactional and governance matters across every business stage and sector.',
+    services: [
+      { icon: 'briefcase',     title: 'Mergers & Acquisitions',           desc: 'End-to-end advisory on domestic and cross-border M&A transactions, from initial structuring through to closing and post-completion integration.' },
+      { icon: 'users',         title: 'Corporate Governance',             desc: 'Board advisory, governance frameworks, director duties, and compliance with Companies Act and SEBI listing obligations.' },
+      { icon: 'globe',         title: 'Cross-Border Transactions',        desc: 'Multi-jurisdictional deal management covering foreign exchange, regulatory approvals, and international structuring.' },
+      { icon: 'trending-up',   title: 'Private Equity & Venture Capital', desc: 'Structuring, negotiating, and closing PE/VC investments including SHA, CCPS structures, and exit mechanisms.' },
+      { icon: 'link',          title: 'Joint Ventures & Alliances',       desc: 'Drafting and negotiating JV agreements, shareholder arrangements, and strategic alliances with domestic and international partners.' },
+      { icon: 'search',        title: 'Due Diligence',                    desc: 'Comprehensive legal due diligence covering corporate, commercial, IP, employment, and regulatory matters.' },
+    ],
+    mattersTitle: 'Selected Corporate Matters',
+    mattersIntro: 'Representative transactions from our corporate practice, illustrating the range and complexity of work we handle.',
+    matters: [
+      { category: 'M&A',          title: 'Cross-Border Acquisition — Technology Sector',       outcome: '₹850 Cr transaction' },
+      { category: 'Private Equity', title: 'Series D Investment Round — Fintech Unicorn',      outcome: '$120M round' },
+      { category: 'Joint Venture', title: 'India Entry JV — European Infrastructure Fund',    outcome: 'Multi-jurisdiction' },
+      { category: 'Restructuring', title: 'Group Restructuring — Listed Conglomerate',         outcome: '14 entities' },
+    ],
+    attorneys: [
+      { name: 'Arjun Mehta',     role: 'Senior Partner',           initials: 'AM' },
+      { name: 'Ananya Kulkarni', role: 'Senior Associate',         initials: 'AK' },
+    ],
+    attorneysTitle: 'Corporate Law Team',
+    ctaTitle:    'Advising on a Corporate Transaction?',
+    ctaBody:     'Our corporate team is available to discuss your transaction, governance matter, or investment on a strictly confidential basis.',
+  },
+
+  'litigation': {
+    title:       'Litigation & Dispute Resolution',
+    eyebrow:     'Practice Area',
+    subtitle:    'Skilled, strategic representation in commercial disputes across courts, tribunals, and arbitration forums — focused on outcomes, not process.',
+    heroImg:     'https://images.unsplash.com/photo-1568992688065-536aad8a12f6?w=1800&auto=format&fit=crop&q=80',
+    overviewImg: 'https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=900&auto=format&fit=crop&q=80',
+    bgImg:       'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1400&auto=format&fit=crop&q=80',
+    overviewLabel: 'Litigation Practice',
+    overviewTitle: 'Dispute Resolution Across Every Forum',
+    overviewBody: [
+      'When disputes arise, the quality of your legal representation can determine the outcome. Our litigation team brings over 18 years of collective experience in commercial courts, appellate forums, and international arbitration — representing clients with the highest commercial and reputational stakes.',
+      'We are known for combining rigorous legal preparation with a strategic, commercially-minded approach. We do not pursue disputes for the sake of it — we advise on the most efficient path to resolution, whether that is litigation, arbitration, mediation, or a negotiated settlement.'
+    ],
+    servicesTitle: 'Dispute Resolution Services',
+    servicesIntro: 'We represent clients across the full spectrum of commercial disputes — from injunctions requiring same-day action to multi-year arbitrations.',
+    services: [
+      { icon: 'scale',         title: 'Commercial Litigation',            desc: 'Representation in commercial suits before District Courts, High Courts, and the Supreme Court of India.' },
+      { icon: 'globe',         title: 'International Arbitration',        desc: 'Representation in SIAC, ICC, LCIA, and ad hoc proceedings — both as claimants and respondents.' },
+      { icon: 'zap',           title: 'Injunctions & Urgent Reliefs',     desc: 'Experienced in obtaining and resisting urgent interim reliefs, including ex-parte injunctions at short notice.' },
+      { icon: 'award',         title: 'Enforcement of Awards',            desc: 'Enforcement of domestic and foreign arbitral awards under the Arbitration & Conciliation Act and New York Convention.' },
+      { icon: 'shield',        title: 'Regulatory Proceedings',           desc: 'Representation in SEBI, CCI, NCLT, and other regulatory enforcement proceedings and appeals.' },
+      { icon: 'file-text',     title: 'Pre-Litigation Advisory',          desc: 'Risk assessment, demand management, and dispute prevention strategies before matters escalate.' },
+    ],
+    mattersTitle: 'Selected Dispute Matters',
+    mattersIntro: 'A selection of significant disputes in which our litigation team has acted — at trial and on appeal.',
+    matters: [
+      { category: 'Arbitration',  title: 'SIAC Arbitration — Infrastructure Contract Dispute',  outcome: '₹320 Cr in dispute' },
+      { category: 'High Court',   title: 'Commercial Suit — Breach of Share Purchase Agreement', outcome: 'Delhi High Court' },
+      { category: 'Supreme Court', title: 'Civil Appeal — Landmark Contract Interpretation',    outcome: 'Reported judgment' },
+      { category: 'Regulatory',   title: 'SEBI Enforcement Proceedings — Listed Entity',        outcome: 'Order set aside' },
+    ],
+    attorneys: [
+      { name: 'Priya Sharma', role: 'Partner — Litigation', initials: 'PS' },
+      { name: 'Rohan Desai',  role: 'Associate',            initials: 'RD' },
+    ],
+    attorneysTitle: 'Litigation Team',
+    ctaTitle:    'Facing a Dispute?',
+    ctaBody:     'Time is often critical in litigation. Speak with our dispute resolution team for an immediate confidential assessment of your position.',
+  },
+
+  'regulatory': {
+    title:       'Regulatory & Compliance',
+    eyebrow:     'Practice Area',
+    subtitle:    'Proactive regulatory strategy, compliance programme design, and expert representation before India\'s sector regulators.',
+    heroImg:     'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1800&auto=format&fit=crop&q=80',
+    overviewImg: 'https://images.unsplash.com/photo-1521791136064-7986c2920216?w=900&auto=format&fit=crop&q=80',
+    bgImg:       'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1400&auto=format&fit=crop&q=80',
+    overviewLabel: 'Regulatory Practice',
+    overviewTitle: 'Navigate Regulation with Confidence',
+    overviewBody: [
+      'India\'s regulatory environment has grown significantly in depth and complexity over the past decade. Our regulatory practice is built around practitioners who have spent careers at the intersection of law and regulation — including attorneys with prior in-house experience at regulated financial institutions.',
+      'We approach regulatory work proactively: helping clients build compliance frameworks that reduce enforcement risk before issues arise, and responding effectively when they do. We have established relationships across SEBI, RBI, IRDAI, TRAI, and the CCI.'
+    ],
+    servicesTitle: 'Regulatory & Compliance Services',
+    servicesIntro: 'We advise clients across regulated industries on navigating India\'s complex multi-regulator environment.',
+    services: [
+      { icon: 'file-check',    title: 'Regulatory Licensing',             desc: 'Obtaining and renewing licences across SEBI, RBI, IRDAI, TRAI, and other sector regulators.' },
+      { icon: 'shield',        title: 'Compliance Programmes',            desc: 'Design and implementation of compliance frameworks, policies, and employee training for regulated entities.' },
+      { icon: 'alert-triangle', title: 'Government Investigations',       desc: 'Representing clients in regulatory investigations, show-cause proceedings, and enforcement actions.' },
+      { icon: 'lock',          title: 'Data Privacy (DPDP)',              desc: 'Compliance advisory under the Digital Personal Data Protection Act, including privacy notices and consent mechanisms.' },
+      { icon: 'trending-up',   title: 'Policy & Regulatory Submissions',  desc: 'Representing client interests in consultations, rule-making, and regulatory submissions.' },
+      { icon: 'users',         title: 'Anti-Bribery & Corruption',        desc: 'FCPA, UK Bribery Act, and Indian anti-corruption compliance including internal investigation support.' },
+    ],
+    mattersTitle: 'Selected Regulatory Matters',
+    mattersIntro: 'Representative matters demonstrating our regulatory practice across sectors and regulators.',
+    matters: [
+      { category: 'SEBI',        title: 'Regulatory Advisory — Listed Financial Institution', outcome: 'Ongoing retainer' },
+      { category: 'RBI',         title: 'NBFC Licensing & Framework Design',                  outcome: 'Licence obtained' },
+      { category: 'DPDP',        title: 'DPDP Compliance Programme — E-commerce Platform',   outcome: '8-month programme' },
+      { category: 'CCI',         title: 'Merger Notification — Phase II Review',              outcome: 'Approval secured' },
+    ],
+    attorneys: [
+      { name: 'Vikram Nair', role: 'Partner — Regulatory', initials: 'VN' },
+      { name: 'Meera Iyer',  role: 'Associate',            initials: 'MI' },
+    ],
+    attorneysTitle: 'Regulatory Team',
+    ctaTitle:    'Navigating a Regulatory Challenge?',
+    ctaBody:     'Whether you face an upcoming inspection, an enforcement matter, or need to build a compliance programme, our regulatory team can help.',
+  },
+
+  'commercial': {
+    title:       'Commercial Transactions',
+    eyebrow:     'Practice Area',
+    subtitle:    'Precise, commercially astute drafting and negotiation of agreements across the full range of business transactions.',
+    heroImg:     'https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1800&auto=format&fit=crop&q=80',
+    overviewImg: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop&q=80',
+    bgImg:       'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=1400&auto=format&fit=crop&q=80',
+    overviewLabel: 'Commercial Practice',
+    overviewTitle: 'Agreements Built to Perform',
+    overviewBody: [
+      'Commercial agreements are the foundation of every business relationship. Our commercial transactions practice focuses on getting those foundations right — drafting with precision, negotiating with conviction, and anticipating the issues that others miss.',
+      'We act across the full range of commercial matters, from standalone supply agreements to multi-party infrastructure project documentation. Our attorneys understand business as well as law — which means the agreements we produce work in practice, not just on paper.'
+    ],
+    servicesTitle: 'Commercial Transaction Services',
+    servicesIntro: 'We cover the full lifecycle of commercial agreements — from initial term sheet through to multi-year contract management.',
+    services: [
+      { icon: 'file-text',     title: 'Commercial Contracts',             desc: 'Master service agreements, supply contracts, distribution agreements, and bespoke commercial arrangements.' },
+      { icon: 'building',      title: 'Project Finance',                  desc: 'Loan agreements, security documentation, and intercreditor arrangements for infrastructure and energy projects.' },
+      { icon: 'cpu',           title: 'Technology & IP Agreements',       desc: 'Software licences, SaaS agreements, IP assignments, and technology transfer documentation.' },
+      { icon: 'home',          title: 'Real Estate Transactions',         desc: 'Development agreements, lease documentation, and sale-purchase arrangements for commercial real estate.' },
+      { icon: 'truck',         title: 'Supply Chain & Outsourcing',       desc: 'Outsourcing agreements, logistics contracts, and supply chain documentation for domestic and international arrangements.' },
+      { icon: 'users',         title: 'Employment & HR Agreements',       desc: 'Executive employment contracts, ESOP plans, non-competes, and senior management agreements.' },
+    ],
+    mattersTitle: 'Selected Commercial Matters',
+    mattersIntro: 'A selection of commercial transactions our team has advised on across industries and contract types.',
+    matters: [
+      { category: 'Project Finance', title: 'Infrastructure Project Financing Documentation',   outcome: '₹1,200 Cr project' },
+      { category: 'Technology',      title: 'SaaS Master Agreement — Pan-India Enterprise Deal', outcome: 'Multi-year term' },
+      { category: 'Real Estate',     title: 'Commercial Lease Portfolio — Retail Chain',        outcome: '42 locations' },
+      { category: 'Outsourcing',     title: 'IT Outsourcing Agreement — Banking Institution',   outcome: '5-year term' },
+    ],
+    attorneys: [
+      { name: 'Arjun Mehta',     role: 'Senior Partner',   initials: 'AM' },
+      { name: 'Ananya Kulkarni', role: 'Senior Associate', initials: 'AK' },
+    ],
+    attorneysTitle: 'Commercial Transactions Team',
+    ctaTitle:    'Negotiating a Commercial Agreement?',
+    ctaBody:     'Our commercial team is available to review, draft, or negotiate any commercial agreement — from a single contract to a complex multi-party arrangement.',
+  },
+
+};
+
+/* ============================================================
+   RENDERER — reads ?id= param and populates the DOM
+   ============================================================ */
+(function render() {
+
+    /* Resolve ID from URL: practice/corporate-law.html OR ?id=corporate-law */
+    const path     = window.location.pathname;
+    const filename = path.split('/').pop().replace('.html', '');
+    const paramId  = new URLSearchParams(window.location.search).get('id');
+    const id       = PRACTICES[filename] ? filename : (paramId || filename);
+    const data     = PRACTICES[id];
+
+    /* ── NOT FOUND ─── */
+    if (!data) {
+        document.getElementById('practiceHero').style.display   = 'none';
+        document.querySelector('.pd-overview').style.display    = 'none';
+        document.querySelector('.pd-services').style.display    = 'none';
+        document.querySelector('.pd-matters').style.display     = 'none';
+        document.querySelector('.pd-attorneys').style.display   = 'none';
+        document.querySelector('.cta').style.display            = 'none';
+        document.getElementById('notFound').style.display       = 'flex';
+        document.title = 'Not Found — X Law Firm';
+        return;
+    }
+
+    /* ── META ─── */
+    document.title = data.title + ' — X Law Firm';
+    document.getElementById('metaDescription').content = data.subtitle;
+
+    /* ── HERO ─── */
+    document.getElementById('heroImg').src          = data.heroImg;
+    document.getElementById('heroImg').alt          = data.title;
+    document.getElementById('heroBreadcrumb').textContent = data.title;
+    document.getElementById('heroEyebrow').textContent    = data.eyebrow;
+    document.getElementById('heroTitle').textContent      = data.title;
+    document.getElementById('heroSubtitle').textContent   = data.subtitle;
+
+    /* ── OVERVIEW ─── */
+    document.getElementById('overviewBgImg').src   = data.bgImg;
+    document.getElementById('overviewImg').src     = data.overviewImg;
+    document.getElementById('overviewImg').alt     = data.title;
+    document.getElementById('overviewLabel').textContent = data.overviewLabel;
+    document.getElementById('overviewTitle').textContent = data.overviewTitle;
+    const overviewBody = document.getElementById('overviewBody');
+    data.overviewBody.forEach(para => {
+        const p = document.createElement('p');
+        p.textContent = para;
+        p.style.cssText = 'color:var(--color-muted);line-height:1.8;margin-bottom:1.2rem;font-size:0.96rem;';
+        overviewBody.appendChild(p);
+    });
+
+    /* ── SERVICES ─── */
+    document.getElementById('servicesBgImg').src   = data.bgImg;
+    document.getElementById('servicesTitle').textContent = data.servicesTitle;
+    document.getElementById('servicesIntro').textContent = data.servicesIntro;
+    const servicesGrid = document.getElementById('servicesGrid');
+    data.services.forEach(svc => {
+        servicesGrid.insertAdjacentHTML('beforeend', `
+            <div class="pd-service-item">
+                <div class="pd-service-icon"><i data-lucide="${svc.icon}"></i></div>
+                <div class="pd-service-text">
+                    <h4>${svc.title}</h4>
+                    <p>${svc.desc}</p>
+                </div>
+            </div>`);
+    });
+
+    /* ── MATTERS ─── */
+    document.getElementById('mattersBgImg').src    = data.heroImg;
+    document.getElementById('mattersTitle').textContent = data.mattersTitle;
+    document.getElementById('mattersIntro').textContent = data.mattersIntro;
+    const mattersList = document.getElementById('mattersList');
+    data.matters.forEach(m => {
+        mattersList.insertAdjacentHTML('beforeend', `
+            <div class="pd-matter-item">
+                <span class="pd-matter-category">${m.category}</span>
+                <span class="pd-matter-title">${m.title}</span>
+                <span class="pd-matter-outcome">${m.outcome}</span>
+            </div>`);
+    });
+
+    /* ── ATTORNEYS ─── */
+    document.getElementById('attorneysBgImg').src  = data.bgImg;
+    document.getElementById('attorneysTitle').textContent = data.attorneysTitle;
+    const attorneysGrid = document.getElementById('attorneysGrid');
+    data.attorneys.forEach(a => {
+        attorneysGrid.insertAdjacentHTML('beforeend', `
+            <div class="pd-attorney-card">
+                <div class="pd-attorney-avatar">${a.initials}</div>
+                <div class="pd-attorney-name">${a.name}</div>
+                <div class="pd-attorney-role">${a.role}</div>
+                <a href="../attorneys.html">View Profile <i data-lucide="arrow-right"></i></a>
+            </div>`);
+    });
+
+    /* ── CTA ─── */
+    document.getElementById('ctaContent').innerHTML = `
+        <h2>${data.ctaTitle}</h2>
+        <p>${data.ctaBody}</p>
+        <div class="cta-actions">
+            <a href="../contact.html" class="btn btn-white">Request a Consultation</a>
+            <a href="../attorneys.html" class="btn btn-ghost">Meet the Team</a>
+        </div>`;
+
+    /* ── ICONS (must run after innerHTML inserts) ─── */
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+})();
+</script>
+
+<script src="../js/animation.js"></script>
+<script src="../js/transitions.js"></script>
+<script src="../js/pages.js"></script>
+</body>
+</html>
