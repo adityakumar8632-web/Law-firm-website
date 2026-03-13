@@ -580,15 +580,18 @@
    ══════════════════════════════════════════════════════════ */
 
 .case-card {
-    flex: 0 0 clamp(280px, 30vw, 360px);
+    flex: 0 0 300px;
+    width: 300px;
+    height: 400px;
     position: relative;
     border-radius: var(--radius-md);
     overflow: hidden;
-    aspect-ratio: 3/4;
     cursor: pointer;
 }
 
 .case-card-img {
+    position: absolute;
+    inset: 0;
     width: 100%; height: 100%;
     object-fit: cover;
     filter: grayscale(60%);
@@ -609,8 +612,21 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    opacity: 0;
+    opacity: 1;
     transition: opacity var(--duration-base);
+}
+
+.case-card-overlay * {
+    color: white;
+}
+
+.case-card-overlay p {
+    color: #b0b0b0;
+}
+
+.case-action {
+    margin-top: 10px;
+
 }
 
 .case-card:hover .case-card-overlay { opacity: 1; }
@@ -690,6 +706,18 @@
     border-color: var(--color-accent);
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
+}
+
+.insight-detail {
+    margin: 10px 10px 0px 10px;
+    height: 85%;
+}
+
+.insight-action {
+    margin: 0px 15px 10px 10px;
+    height: 10%;
+    display: flex;
+    flex-direction: row-reverse;
 }
 
 .insight-card-image {
