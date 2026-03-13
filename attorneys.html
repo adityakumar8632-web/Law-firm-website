@@ -82,27 +82,31 @@
     position: relative;
 }
 
-.attorney-photo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: top center;
-    filter: grayscale(20%);
-    transition: transform 400ms var(--ease-standard), filter 400ms;
-}
-
 .attorney-card:hover .attorney-photo img {
     transform: scale(1.04);
     filter: grayscale(0%);
 }
 
 .attorney-photo-placeholder {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     justify-content: center;
     background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-surface-alt) 100%);
+    z-index: 0;
+}
+
+.attorney-photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    filter: grayscale(20%);
+    transition: transform 400ms var(--ease-standard), filter 400ms;
+    z-index: 1;
 }
 
 .attorney-photo-placeholder span {
@@ -681,6 +685,7 @@
                 data-initials="AM">
                 <div class="attorney-photo">
                     <div class="attorney-photo-placeholder"><span>AM</span></div>
+                    <img src="images/Arjun Mehta.png" alt="Arjun Mehta" loading="lazy" onerror="this.style.display='none'">
                 </div>
                 <div class="attorney-info">
                     <div class="attorney-name">Arjun Mehta</div>
@@ -714,6 +719,7 @@
                 data-initials="PS">
                 <div class="attorney-photo">
                     <div class="attorney-photo-placeholder"><span>PS</span></div>
+                    <img src="images/Priya Sharma.png" alt="Priya Sharma" loading="lazy" onerror="this.style.display='none'">
                 </div>
                 <div class="attorney-info">
                     <div class="attorney-name">Priya Sharma</div>
@@ -747,6 +753,7 @@
                 data-initials="VN">
                 <div class="attorney-photo">
                     <div class="attorney-photo-placeholder"><span>VN</span></div>
+                    <img src="images/Vikram Nair.png" alt="Vikram Nair" loading="lazy" onerror="this.style.display='none'">
                 </div>
                 <div class="attorney-info">
                     <div class="attorney-name">Vikram Nair</div>
@@ -780,6 +787,7 @@
                 data-initials="AK">
                 <div class="attorney-photo">
                     <div class="attorney-photo-placeholder"><span>AK</span></div>
+                    <img src="images/Ananya Kulkarni.png" alt="Ananya Kulkarni" loading="lazy" onerror="this.style.display='none'">
                 </div>
                 <div class="attorney-info">
                     <div class="attorney-name">Ananya Kulkarni</div>
@@ -813,6 +821,7 @@
                 data-initials="RD">
                 <div class="attorney-photo">
                     <div class="attorney-photo-placeholder"><span>RD</span></div>
+                    <img src="images/Rohan Desai.png" alt="Rohan Desai" loading="lazy" onerror="this.style.display='none'">
                 </div>
                 <div class="attorney-info">
                     <div class="attorney-name">Rohan Desai</div>
@@ -846,6 +855,7 @@
                 data-initials="MI">
                 <div class="attorney-photo">
                     <div class="attorney-photo-placeholder"><span>MI</span></div>
+                    <img src="images/Meera Iyer.png" alt="Meera Iyer" loading="lazy" onerror="this.style.display='none'">
                 </div>
                 <div class="attorney-info">
                     <div class="attorney-name">Meera Iyer</div>
