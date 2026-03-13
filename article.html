@@ -869,7 +869,7 @@ const ARTICLES = {
 /* ============================================================
    RENDERER
    ============================================================ */
-(function render() {
+document.addEventListener('DOMContentLoaded', function render() {
     const id   = new URLSearchParams(window.location.search).get('id');
     const data = ARTICLES[id];
 
@@ -1004,7 +1004,7 @@ const ARTICLES = {
         });
     }
 
-})();
+});
 
 /* ── READING PROGRESS BAR ────────────────────────────────── */
 window.addEventListener('scroll', () => {
