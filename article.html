@@ -10,9 +10,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-<script defer src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
 <link rel="stylesheet" href="css/base.css">
 <link rel="stylesheet" href="css/layout.css">
@@ -21,6 +21,8 @@
 <link rel="stylesheet" href="css/pages.css">
 <link rel="stylesheet" href="css/responsive.css">
 
+<!-- Fav Icon -->
+<link rel="icon" type="image/png" href="images/favicon-32x32.png">
 <style>
 /* ── ARTICLE PAGE ────────────────────────────────────── */
 
@@ -869,7 +871,7 @@ const ARTICLES = {
 /* ============================================================
    RENDERER
    ============================================================ */
-document.addEventListener('DOMContentLoaded', function render() {
+(function render() {
     const id   = new URLSearchParams(window.location.search).get('id');
     const data = ARTICLES[id];
 
@@ -1004,7 +1006,7 @@ document.addEventListener('DOMContentLoaded', function render() {
         });
     }
 
-});
+})();
 
 /* ── READING PROGRESS BAR ────────────────────────────────── */
 window.addEventListener('scroll', () => {
@@ -1016,8 +1018,8 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 </script>
 
-<script defer src="js/animation.js"></script>
-<script defer src="js/transitions.js"></script>
-<script defer src="js/pages.js"></script>
+<script src="js/animation.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
 </body>
 </html>
